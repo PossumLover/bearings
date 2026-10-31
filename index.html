@@ -1,0 +1,1704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Bearings</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A do-it-yourself premarital inventory for two. Answer separately, compare side by side, and find what to talk about.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;700;800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one centered column like a field notebook while answering; results widen to a two-column grid on desktop. */
+:root {
+  --paper: #F2F4EF;
+  --card: #FFFFFF;
+  --ink: #17212B;
+  --muted: #5A6570;
+  --rule: #D6DBD2;
+  --wash: #E6EAE2;
+  --accent: #285C4C;
+  --accent-ink: #FFFFFF;
+  --pa: #2360A5;
+  --pb: #8C479F;
+  --agree: #2B7A4B;
+  --differ: #B3343F;
+  --unsure: #7F7152;
+  --concern: #BD5512;
+  --agree-bg: #E1F0E5;
+  --differ-bg: #F7E2E4;
+  --unsure-bg: #ECEAE2;
+  --concern-bg: #FAE7D8;
+  --f-display: "Alegreya", Georgia, "Times New Roman", serif;
+  --f-body: "Alegreya Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11171C; --card: #19212A; --ink: #E5E9E3; --muted: #9AA5AF; --rule: #2B353F; --wash: #1F2830;
+    --accent: #7DBFA6; --accent-ink: #0D1A15; --pa: #74A9EA; --pb: #C99ADB;
+    --agree: #6CC490; --differ: #F07D88; --unsure: #BDB18F; --concern: #F2A35E;
+    --agree-bg: #1B3325; --differ-bg: #3A1E23; --unsure-bg: #2A2922; --concern-bg: #3A291B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11171C; --card: #19212A; --ink: #E5E9E3; --muted: #9AA5AF; --rule: #2B353F; --wash: #1F2830;
+  --accent: #7DBFA6; --accent-ink: #0D1A15; --pa: #74A9EA; --pb: #C99ADB;
+  --agree: #6CC490; --differ: #F07D88; --unsure: #BDB18F; --concern: #F2A35E;
+  --agree-bg: #1B3325; --differ-bg: #3A1E23; --unsure-bg: #2A2922; --concern-bg: #3A291B;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.5; margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--pa); outline-offset: 2px; border-radius: 6px; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; line-height: 1.12; margin: 0; font-weight: 700; }
+h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 1.65rem; }
+h3 { font-size: 1.2rem; }
+p { margin: 0; }
+a { color: var(--accent); }
+.eyebrow { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.muted { color: var(--muted); }
+.small { font-size: 0.88rem; }
+.mono { font-family: var(--f-mono); }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.stack-lg { display: flex; flex-direction: column; gap: 28px; }
+.row-wrap { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* ---------- Header ---------- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar-in { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.brand { display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; font-family: var(--f-display); font-weight: 800; font-size: 1.35rem; color: var(--ink); }
+.brand svg { width: 26px; height: 26px; }
+.bar-nav { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.navbtn { background: none; border: 1px solid transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer; color: var(--muted); font-weight: 500; }
+.navbtn[aria-current="page"] { border-color: var(--rule); background: var(--card); color: var(--ink); }
+
+/* ---------- Layout ---------- */
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 72px; }
+.wrap.wide { max-width: 1080px; }
+.card { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
+.card.flat { background: transparent; }
+.notice { border-radius: 12px; padding: 14px 16px; background: var(--wash); }
+.notice.warn { background: var(--concern-bg); }
+.notice.bad { background: var(--differ-bg); }
+.notice.good { background: var(--agree-bg); }
+
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; padding: 10px 18px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; font-weight: 500; min-height: 44px; text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.btn.ghost { background: transparent; }
+.btn.danger { color: var(--differ); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-weight: 500; }
+
+/* ---------- Home ---------- */
+.hero { display: grid; gap: 18px; padding-block: 8px 4px; }
+.lede { font-size: 1.18rem; max-width: 60ch; }
+.gets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px 18px; }
+.get { border-top: 2px solid var(--ink); padding-top: 8px; }
+.get b { display: block; font-family: var(--f-display); font-size: 1.05rem; }
+.form { display: grid; gap: 16px; }
+.field { display: grid; gap: 6px; }
+.field > span { font-weight: 700; }
+.field input[type="text"] { border: 1px solid var(--rule); background: var(--paper); border-radius: 10px; padding: 10px 12px; min-height: 44px; width: 100%; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: inline-block; border: 1px solid var(--rule); border-radius: 999px; padding: 7px 14px; cursor: pointer; background: var(--card); }
+.seg input:checked + span { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.seg input:focus-visible + span { outline: 3px solid var(--pa); outline-offset: 2px; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+.prog { height: 8px; border-radius: 99px; background: var(--wash); overflow: hidden; }
+.prog > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.secgroup { display: grid; gap: 0; }
+.secrow { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 11px 2px; border-top: 1px solid var(--rule); background: none; border-left: 0; border-right: 0; border-bottom: 0; text-align: left; cursor: pointer; width: 100%; }
+.secrow:last-child { border-bottom: 1px solid var(--rule); }
+.secrow .n { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.9rem; }
+.secrow .prog { grid-column: 1 / -1; height: 4px; }
+.secrow.complete .n { color: var(--agree); font-weight: 700; }
+.who { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.a { background: var(--pa); }
+.dot.b { background: var(--pb); }
+
+/* ---------- Questionnaire ---------- */
+.sechead { display: grid; gap: 8px; padding-bottom: 6px; }
+.stickyprog { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 53px); z-index: 4; background: var(--paper); padding-block: 8px; display: flex; gap: 12px; align-items: center; }
+.stickyprog .prog { flex: 1; }
+.stickyprog .n { font-variant-numeric: tabular-nums; font-size: 0.9rem; color: var(--muted); }
+.q { padding-block: 18px; border-top: 1px solid var(--rule); scroll-margin-top: 120px; }
+.q .qt { font-size: 1.06rem; }
+.q.missing { box-shadow: inset 4px 0 0 var(--concern); padding-left: 12px; }
+.subhead { padding-top: 22px; padding-bottom: 4px; }
+.scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+.opt { border: 1px solid var(--rule); background: var(--card); border-radius: 9px; padding: 8px 4px; font-size: 0.8rem; line-height: 1.15; cursor: pointer; min-height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.opt b { font-family: var(--f-mono); font-size: 0.85rem; font-weight: 500; }
+.opt[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.choices { display: grid; gap: 6px; margin-top: 10px; }
+.choice { text-align: left; border: 1px solid var(--rule); background: var(--card); border-radius: 9px; padding: 10px 12px; cursor: pointer; min-height: 44px; }
+.choice[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.guess { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: var(--wash); }
+.guess .choices { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.guess .choice { font-size: 0.88rem; padding: 7px 10px; min-height: 38px; }
+.guess .choice[aria-pressed="true"] { background: var(--pb); border-color: var(--pb); color: #fff; }
+.whogrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+.openq textarea { width: 100%; min-height: 110px; border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; background: var(--card); resize: vertical; margin-top: 8px; }
+.secnav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--rule); margin-top: 8px; }
+.safety label { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--rule); cursor: pointer; }
+.safety input { width: 20px; height: 20px; margin-top: 3px; flex: none; }
+
+/* ---------- Share ---------- */
+.code { width: 100%; min-height: 150px; font-family: var(--f-mono); font-size: 0.78rem; word-break: break-all; border: 1px solid var(--rule); border-radius: 10px; padding: 10px; background: var(--paper); resize: vertical; }
+
+/* ---------- Results ---------- */
+.tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--rule); margin-bottom: 22px; scrollbar-width: thin; }
+.tab { background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 12px; cursor: pointer; color: var(--muted); font-weight: 700; white-space: nowrap; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.samplebar { background: var(--agree-bg); border-radius: 12px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+.grid2 > * { min-width: 0; }
+.bands { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.band { border-radius: 12px; padding: 12px 14px; }
+.band h4 { font-family: var(--f-body); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.band ul { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 2px; }
+.band.strong { background: var(--agree-bg); } .band.strong h4 { color: var(--agree); }
+.band.good { background: var(--wash); } .band.good h4 { color: var(--agree); }
+.band.mid { background: var(--unsure-bg); } .band.mid h4 { color: var(--unsure); }
+.band.low { background: var(--concern-bg); } .band.low h4 { color: var(--concern); }
+.tbars { display: grid; gap: 0; }
+.tbar { display: grid; grid-template-columns: minmax(120px, 190px) 1fr 3.2em; gap: 6px 14px; align-items: center; padding: 10px 0; border-top: 1px solid var(--rule); background: none; border-left: 0; border-right: 0; border-bottom: 0; width: 100%; text-align: left; cursor: pointer; }
+.tbar .nm { font-weight: 700; }
+.tbar .pct { font-variant-numeric: tabular-nums; font-family: var(--f-mono); text-align: right; font-size: 0.9rem; }
+.track { position: relative; height: 12px; background: var(--wash); border-radius: 99px; }
+.track > i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; }
+.fill-strong { background: var(--agree); } .fill-good { background: color-mix(in srgb, var(--agree) 60%, var(--wash)); }
+.fill-mid { background: var(--unsure); } .fill-low { background: var(--concern); }
+.tbar .ind { grid-column: 2 / -1; font-size: 0.85rem; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+.chip { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+.chip.agree, .chip.same { background: var(--agree-bg); color: var(--agree); }
+.chip.differ, .chip.far { background: var(--differ-bg); color: var(--differ); }
+.chip.unsure { background: var(--unsure-bg); color: var(--unsure); }
+.chip.concern { background: var(--concern-bg); color: var(--concern); }
+.chip.close { background: var(--wash); color: var(--ink); }
+.chip.tag { background: var(--wash); color: var(--muted); font-weight: 500; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; padding: 12px 0; border-top: 1px solid var(--rule); }
+.item > * { min-width: 0; }
+.item .side { display: flex; gap: 6px; align-items: flex-start; justify-content: flex-end; flex-wrap: wrap; }
+.item .detail { grid-column: 1 / -1; }
+.pips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 360px; }
+.pip { height: 26px; border-radius: 6px; background: var(--wash); display: flex; align-items: center; justify-content: center; gap: 2px; }
+.pip span { width: 20px; height: 20px; border-radius: 50%; color: #fff; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.pip .a { background: var(--pa); } .pip .b { background: var(--pb); }
+.pipkey { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 360px; font-size: 0.68rem; color: var(--muted); text-align: center; line-height: 1.1; }
+.ans { display: grid; gap: 4px; font-size: 0.95rem; }
+.ans div { display: flex; gap: 8px; align-items: baseline; }
+.ans .dot { transform: translateY(1px); }
+.gs { font-size: 0.85rem; color: var(--muted); }
+.ok { color: var(--agree); font-weight: 700; } .no { color: var(--differ); font-weight: 700; }
+.iconbtn { background: none; border: 1px solid var(--rule); border-radius: 8px; min-width: 36px; height: 34px; cursor: pointer; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; font-size: 0.85rem; gap: 4px; }
+.iconbtn[aria-pressed="true"] { color: var(--concern); border-color: var(--concern); background: var(--concern-bg); }
+.iconbtn.donebtn[aria-pressed="true"] { color: var(--agree); border-color: var(--agree); background: var(--agree-bg); }
+.topiclist { display: grid; gap: 0; }
+.detailhead { display: grid; gap: 10px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; }
+.openans { display: grid; gap: 10px; }
+.openans blockquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--pa); background: var(--card); border-radius: 0 10px 10px 0; white-space: pre-wrap; }
+.openans blockquote.b { border-left-color: var(--pb); }
+.asklist { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.ex ol { margin: 8px 0 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.mapwrap { overflow-x: auto; }
+.mapwrap svg { display: block; width: 100%; max-width: 420px; height: auto; }
+.trait { display: grid; gap: 6px; padding: 12px 0; border-top: 1px solid var(--rule); }
+.ttrack { position: relative; height: 22px; }
+.ttrack::before { content: ""; position: absolute; left: 0; right: 0; top: 10px; height: 2px; background: var(--rule); }
+.mk { position: absolute; border-radius: 50%; }
+.mk.fa, .mk.fb { top: 5px; width: 12px; height: 12px; margin-left: -6px; z-index: 1; }
+.mk.ha, .mk.hb { top: 0; width: 22px; height: 22px; margin-left: -11px; }
+.mk.fa { background: var(--pa); } .mk.fb { background: var(--pb); }
+.mk.ha { border: 3px solid var(--pa); } .mk.hb { border: 3px solid var(--pb); }
+.legend .mk { position: static; margin: 0; display: inline-block; }
+.tends { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.85rem; color: var(--muted); align-items: center; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.lv { font-weight: 700; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.tbl th, .tbl td { text-align: left; padding: 8px 6px; border-top: 1px solid var(--rule); vertical-align: top; }
+.tbl th { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.tblwrap { overflow-x: auto; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.filters button { border: 1px solid var(--rule); background: var(--card); border-radius: 999px; padding: 5px 12px; cursor: pointer; font-size: 0.88rem; }
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+@media (max-width: 560px) {
+  .bar { position: static; }
+  .stickyprog { top: env(safe-area-inset-top, 0px); }
+  .opt span { font-size: 0.7rem; }
+  .whogrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tbar { grid-template-columns: 1fr 3em; }
+  .tbar .track { grid-column: 1 / -1; grid-row: 2; }
+  .item { grid-template-columns: 1fr; }
+  .item .side { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+
+<div id="app"></div>
+<noscript><p style="padding:24px">Bearings needs JavaScript to run.</p></noscript>
+
+<script>
+(() => {
+"use strict";
+
+/* =====================================================================
+   QUESTION BANK
+   Every statement, decision question and exercise here is original.
+   The personality items are the Mini-IPIP (Donnellan et al., 2006),
+   which is in the public domain via the International Personality Item Pool.
+
+   Item kinds:
+     s  five-point statement. p = 1: agreeing is the healthy answer;
+        p = -1: disagreeing is; p = 0: a values question with no right answer.
+     c  a concrete decision with options. ord = options are ordered;
+        g = partners may guess each other's pick; big = weighs more.
+     w  "who should handle this", answered from each person's own side.
+   ===================================================================== */
+const S = (id, p, t, x) => Object.assign({ id, k: "s", p, t }, x);
+const V = (id, t, x) => Object.assign({ id, k: "s", p: 0, t }, x);
+const C = (id, t, o, x) => Object.assign({ id, k: "c", t, o }, x);
+const W = (id, t, x) => Object.assign({ id, k: "w", t }, x);
+const notMarried = s => s.stage !== "married";
+const engaged = s => s.stage === "engaged";
+const hasKids = s => s.kids && s.kids !== "none";
+
+const TOPICS = [
+{ id: "talk", title: "Communication", ex: "listen",
+  intro: "How you share what you think and feel, and how well you feel heard.",
+  items: [
+    S("talk1", 1, "When something is bothering me, I bring it up within a day or two instead of letting it sit."),
+    S("talk2", -1, "I often hold back what I really think so I don’t upset my partner."),
+    S("talk3", 1, "When I’m talking, my partner puts the phone down and actually listens."),
+    S("talk4", -1, "My partner sometimes uses a tone with me that feels belittling."),
+    S("talk5", 1, "I can tell my partner I’m hurt without it turning into a fight."),
+    S("talk6", -1, "There are subjects I’ve learned not to bring up with my partner."),
+    S("talk7", 1, "My partner usually notices when something is off with me, even before I say anything."),
+    S("talk8", -1, "I sometimes wonder whether my partner is telling me the whole story."),
+    S("talk9", 1, "We regularly talk about more than logistics: ideas, worries, hopes."),
+    S("talk10", -1, "When I ask my partner for something, they tend to hear it as criticism."),
+    C("talk_c1", "How often do you want a real check-in about how the two of you are doing (not schedules or chores)?", ["Every day", "A few times a week", "Once a week", "Only when something comes up"], { ord: 1, g: 1 }),
+    C("talk_c2", "When you’re upset, what do you need first?", ["To talk it through right away", "A little time, then talk", "Space until I come to you", "A distraction, then maybe talk"], { g: 1 }),
+    C("talk_c3", "Is it OK to work through a disagreement over text?", ["Yes, text is fine", "Start by text, finish in person", "No, wait until we can talk"], { ord: 1, g: 1 }),
+  ],
+  prompt: "What is one thing you wish your partner understood about how you communicate?",
+  ask: ["When do you feel most listened to by me? What was I doing?", "What topic is hardest for you to bring up with me, and why?", "How can I tell when you want me to listen rather than fix?"] },
+
+{ id: "fight", title: "Conflict", ex: "fight",
+  intro: "How you disagree, how arguments end, and how you make up.",
+  items: [
+    S("fight1", 1, "When we disagree, we usually land on something we can both live with."),
+    S("fight2", -1, "Some of our arguments keep circling back to the same unsettled issue."),
+    S("fight3", 1, "I can stay calm enough in an argument to really hear my partner’s side."),
+    S("fight4", -1, "In arguments, one of us drags in old mistakes."),
+    S("fight5", 1, "After a fight, we’re back to normal within a day."),
+    S("fight6", -1, "I sometimes give in just to make an argument stop."),
+    S("fight7", 1, "My partner owns it and apologizes when they were wrong."),
+    S("fight8", -1, "Our arguments sometimes get louder or meaner than I’m comfortable with."),
+    S("fight9", 1, "If one of us asks for a break mid-argument, the other respects it."),
+    S("fight10", -1, "My partner goes quiet or leaves when I want to settle something."),
+    C("fight_c1", "After calling a break in an argument, when should you come back to it?", ["Within about 20 minutes", "Later the same day", "The next day", "Whenever it feels right"], { ord: 1, g: 1 }),
+    C("fight_c2", "Who should make the first move to make up after a fight?", ["Whoever was more in the wrong", "Whoever cools down first", "We take turns", "It doesn’t matter"], { g: 1 }),
+    C("fight_c3", "Would you see a couples counselor if you got stuck on something?", ["Yes, early, before it gets serious", "Yes, once it’s serious", "Only as a last resort", "No"], { ord: 1, g: 1, big: 1 }),
+  ],
+  prompt: "What usually happens inside you when an argument starts?",
+  ask: ["What did arguments look like in the home you grew up in? What do you want to do differently?", "What do I do in arguments that helps? What makes it worse?", "How do we know when an argument is really over?"] },
+
+{ id: "style", title: "Habits and personality", ex: "wish",
+  intro: "How you feel about each other’s habits, moods and everyday ways of being.",
+  items: [
+    S("style1", -1, "Some of my partner’s habits wear on me more than I’ve let on."),
+    S("style2", 1, "I admire how my partner handles their responsibilities."),
+    S("style3", -1, "My partner’s moods tend to set the tone of the whole day for both of us."),
+    S("style4", 1, "My partner does what they say they’ll do."),
+    S("style5", -1, "I’m sometimes embarrassed by how my partner acts around other people."),
+    S("style6", 1, "My partner is easy to be around when things go wrong."),
+    S("style7", -1, "My partner’s temper worries me at times."),
+    S("style8", 1, "I like who I am when I’m with my partner."),
+    S("style9", -1, "I’m quietly hoping my partner will change some things about themselves over time."),
+    S("style10", 1, "The way my partner handles stress works well for both of us."),
+    C("style_c1", "How tidy should home be on a normal day?", ["Spotless", "Tidy, with a quick reset every day", "Lived-in, with a weekly clean", "Mess really doesn’t bother me"], { ord: 1, g: 1 }),
+    C("style_c2", "What counts as on time?", ["Early is on time", "Right on the dot", "Within ten minutes", "Loose, it’s fine"], { ord: 1, g: 1 }),
+    C("style_c3", "Ideal bedtime on a work night?", ["Before 10 pm", "10 to 11 pm", "11 pm to midnight", "After midnight"], { ord: 1, g: 1 }),
+  ],
+  prompt: "Which of your own habits do you suspect your partner puts up with?",
+  ask: ["Which of my habits do you love, and which do you put up with?", "What do I do when I’m stressed, and what helps you then?", "Is there anything you’re hoping will change? Say it out loud now."] },
+
+{ id: "money", title: "Money", ex: "money",
+  intro: "Spending, saving, debt, and how you make money decisions together.",
+  items: [
+    S("money1", 1, "I know my partner’s income, debts and savings, at least roughly."),
+    S("money2", -1, "Debt (mine, my partner’s, or ours) worries me."),
+    S("money3", 1, "We have a monthly budget we both agreed to, even a rough one."),
+    S("money4", -1, "Some of my partner’s spending makes me nervous."),
+    S("money5", 1, "We agree on how much to save and how much to enjoy now."),
+    S("money6", -1, "Conversations about money between us tend to get tense."),
+    S("money7", 1, "I’d feel fine telling my partner about a purchase I regret."),
+    S("money8", -1, "I worry our income won’t support the life we want."),
+    S("money9", 1, "We’ve talked about what we would do if one of us lost a job."),
+    S("money10", -1, "One of us cares a lot more about money than the other, and it shows."),
+    C("money_c1", "How should money work once you’re married?", ["Everything combined", "Combined, plus personal spending money for each", "A joint account for shared bills, the rest separate", "Fully separate"], { ord: 1, g: 1, big: 1 }),
+    C("money_c2", "Above what amount should either of you check with the other before buying something?", ["$50", "$200", "$500", "$1,000 or more"], { ord: 1, g: 1 }),
+    C("money_c3", "How much of your income should you aim to save?", ["Under 5%", "5 to 10%", "10 to 20%", "Over 20%"], { ord: 1, g: 1 }),
+    C("money_c4", "Should you give money to family members who need it?", ["Yes, generously", "Yes, up to a set limit", "Only in emergencies", "I’d rather not"], { ord: 1, g: 1 }),
+  ],
+  prompt: "What did money mean in the house you grew up in?",
+  ask: ["What is your biggest money fear?", "What would you do with an unexpected $10,000?", "How should we decide on big purchases?"] },
+
+{ id: "time", title: "Free time", ex: "dates",
+  intro: "Fun, hobbies, and the balance between time together and time apart.",
+  items: [
+    S("time1", 1, "We easily come up with things we both enjoy doing."),
+    S("time2", -1, "I wish more of our free time were spent actually together, not just in the same room."),
+    S("time3", 1, "I have enough time for my own friends and interests."),
+    S("time4", -1, "My partner’s hobbies or screen time crowd out our time together."),
+    S("time5", 1, "We laugh together most days."),
+    S("time6", -1, "I sometimes go along with activities I don’t enjoy to keep my partner happy."),
+    S("time7", 1, "We plan dates and trips instead of just letting weekends happen."),
+    S("time8", -1, "We picture a relaxing weekend differently, and it causes friction."),
+    S("time9", 1, "My partner encourages my interests even when they don’t share them."),
+    S("time10", -1, "Our time together has started to feel like routine."),
+    C("time_c1", "Your ideal Saturday?", ["Out with friends", "Out, just the two of us", "Home, together", "Home, each doing our own thing"], { g: 1 }),
+    C("time_c2", "How many evenings a week should be phone-free time together?", ["0 or 1", "2 or 3", "4 or 5", "Most nights"], { ord: 1, g: 1 }),
+    C("time_c3", "Your kind of vacation?", ["Adventure and new places", "A mix", "Rest and familiar places"], { ord: 1, g: 1 }),
+    C("time_c4", "How much time apart (solo evenings, trips with friends) feels healthy?", ["Very little", "An evening a week or so", "Several evenings a month, plus the odd trip", "Plenty"], { ord: 1, g: 1 }),
+  ],
+  prompt: "Describe a perfect day off with your partner.",
+  ask: ["What did we do in the early days that we’ve stopped doing?", "What’s something new you’d like to try together this year?", "How much alone time do you need to feel like yourself?"] },
+
+{ id: "sex", title: "Sex and affection", ex: "intimacy",
+  intro: "Physical affection, desire, trust, and how easily you can talk about it.",
+  items: [
+    S("sex1", 1, "I can talk with my partner about sex without feeling awkward."),
+    S("sex2", -1, "I worry that our desire for sex is, or will be, mismatched."),
+    S("sex3", 1, "I get plenty of affection that isn’t about sex: hugs, touch, closeness."),
+    S("sex4", -1, "Affection sometimes gets held back to make a point."),
+    S("sex5", 1, "We’ve talked about birth control and family planning, and we agree."),
+    S("sex6", -1, "There’s something about our sex life I haven’t felt able to say."),
+    S("sex7", 1, "I trust my partner to be faithful."),
+    S("sex8", -1, "Porn or other sexual content is a source of worry or tension for me."),
+    S("sex9", 1, "If our sex life hit a rough patch, I’d feel safe bringing it up."),
+    S("sex10", -1, "Things from the past (mine or my partner’s) affect our physical relationship in ways we haven’t discussed."),
+    C("sex_c1", "Ideally, how often would you have sex?", ["Several times a week", "About once a week", "A few times a month", "Once a month or less"], { ord: 1, g: 1 }),
+    C("sex_c2", "Where does cheating start?", ["Only with physical contact", "Also secret emotional closeness", "Also flirting or sexting", "Also some porn or dating apps"], { ord: 1, g: 1, big: 1 }),
+    W("sex_w1", "Starting sex, ideally"),
+  ],
+  prompt: "What makes you feel loved, physically and otherwise?",
+  ask: ["What does a really good week of affection look like for you?", "How should each of us say no, so the other doesn’t feel rejected?", "Is there anything you’ve wanted to ask about but haven’t?"] },
+
+{ id: "family", title: "Family and friends", ex: "family",
+  intro: "Parents, in-laws, friends, and where the boundaries sit.",
+  items: [
+    S("fam1", 1, "I look forward to visits with my partner’s family."),
+    S("fam2", -1, "One of our families has opinions about us that cause strain."),
+    S("fam3", 1, "When a parent’s wishes clash with ours, my partner sides with us."),
+    S("fam4", -1, "I worry about how involved a parent will be in our decisions."),
+    S("fam5", 1, "I’d happily spend a weekend away with my partner’s closest friends."),
+    S("fam6", -1, "Some of my partner’s friendships make me uneasy."),
+    S("fam7", 1, "My family treats my partner as one of us."),
+    S("fam8", -1, "Whose family we see for holidays is already a sore point."),
+    S("fam9", 1, "We’ve talked about what we’d do if a parent needed care or a place to live."),
+    S("fam10", -1, "Accepting money or favors from family would come with strings attached."),
+    C("fam_c1", "How often should you see each other’s families?", ["Every week", "Every month", "A few times a year", "Rarely"], { ord: 1, g: 1 }),
+    C("fam_c2", "How should holidays work?", ["Alternate years between families", "Split each holiday between both families", "Wherever is easiest that year", "Our own traditions at home"], { g: 1 }),
+    C("fam_c3", "Could a parent ever move in with you?", ["Yes, gladly", "Yes, if they needed it", "Only for a short time", "No"], { ord: 1, g: 1, big: 1 }),
+    C("fam_c4", "How close should you live to family?", ["Same town", "Within an hour", "Within a day’s travel", "It doesn’t matter"], { ord: 1, g: 1 }),
+  ],
+  prompt: "What do you want your partner to understand about your family?",
+  ask: ["What role do you want our parents to play in our marriage?", "What should we do when one of our families criticizes the other one of us?", "Which friendships do you want to protect, and what boundaries feel right?"] },
+
+{ id: "roles", title: "Home and roles", ex: "chores",
+  intro: "Who does what, who decides, and how careers fit together.",
+  items: [
+    V("role1", "Whoever earns more should have more say in big money decisions."),
+    V("role2", "Chores should be split evenly, even if one of us works longer hours."),
+    S("role3", 1, "I’m confident the mental load (remembering, planning, scheduling) will be shared fairly."),
+    S("role4", -1, "I already feel I do more than my share around the house."),
+    V("role5", "If we have kids, one of us should stay home with them for the first few years."),
+    V("role6", "Each of us should be willing to put our career second for a while if the other’s needs it."),
+    S("role7", 1, "We make big decisions together rather than one person deciding."),
+    V("role8", "I like having clear jobs that are “mine” and “yours”."),
+    S("role9", -1, "I expect I’ll end up being the one who tracks birthdays, appointments and plans."),
+    S("role10", 1, "We’re both willing to renegotiate who does what when life changes."),
+    W("role_w1", "Cooking"),
+    W("role_w2", "Cleaning and laundry"),
+    W("role_w3", "Paying bills and tracking money"),
+    W("role_w4", "Planning social life, gifts and birthdays"),
+    W("role_w5", "Earning most of the income"),
+    W("role_w6", "Day-to-day care of children"),
+    W("role_w7", "Repairs, car and admin"),
+  ],
+  prompt: "Which household job do you secretly enjoy, and which do you dread?",
+  ask: ["How did your parents split the work? Which parts do you want, and which don’t you?", "What invisible jobs do you do that I might not notice?", "If one of us got an amazing job across the country, how would we decide?"] },
+
+{ id: "meaning", title: "Beliefs and meaning", ex: "meaning",
+  intro: "Religion or its absence, values, purpose, and how they show up at home.",
+  items: [
+    V("mean1", "Religion or spirituality will play an active part in our home."),
+    S("mean2", 1, "We respect each other’s beliefs, even where they differ."),
+    S("mean3", -1, "Our families’ religious expectations could cause tension (ceremonies, holidays, how kids are raised)."),
+    V("mean4", "It matters to me that we share the same basic worldview."),
+    S("mean5", 1, "I know what gives my partner a sense of purpose."),
+    V("mean6", "If we have children, they should be raised within a religious tradition."),
+    S("mean7", -1, "We avoid talking about religion or politics because it gets uncomfortable."),
+    S("mean8", 1, "We share the same values about how to treat other people."),
+    V("mean9", "Volunteering or giving to causes should be a regular part of our life."),
+    S("mean10", -1, "I sometimes feel judged by my partner for what I believe or don’t believe."),
+    C("mean_c1", "What role should religion or spiritual practice have in your home?", ["Central, weekly or more", "Occasional: holidays and milestones", "Cultural traditions only", "None"], { ord: 1, g: 1, big: 1 }),
+    C("mean_c2", "What kind of wedding ceremony do you want?", ["Religious", "A mix", "Secular"], { ord: 1, g: 1, when: notMarried }),
+    C("mean_c3", "How much do you need to agree on politics?", ["We should mostly agree", "Differences are fine if we’re respectful", "It doesn’t matter to me"], { ord: 1, g: 1 }),
+  ],
+  prompt: "What do you think makes a life well lived?",
+  ask: ["Which holidays and rituals matter to you, and why?", "How should we handle family members who expect a religious ceremony or upbringing?", "What would you want people to say we stood for?"] },
+
+{ id: "expect", title: "Marriage expectations", ex: "future",
+  intro: "What you expect marriage to change, and what you expect it to ask of you.",
+  items: [
+    S("exp1", -1, "I expect marriage to make some of our current problems go away."),
+    S("exp2", 1, "I expect we’ll have to work at keeping romance alive, and I’m fine with that."),
+    V("exp3", "Married people should still be able to keep some things private from each other."),
+    S("exp4", -1, "I expect my partner to meet most of my emotional needs."),
+    S("exp5", 1, "I believe we could get through a year of serious hardship together."),
+    V("exp6", "Divorce is a reasonable option if both of us have been unhappy for a long time."),
+    S("exp7", 1, "We’ve talked about what we want our life to look like in ten years."),
+    S("exp8", -1, "I feel some pressure (from family, friends, or timing) to get married.", { when: notMarried }),
+    S("exp9", 1, "I accept my partner as they are, not as I hope they’ll become."),
+    V("exp10", "Marriage is for life, whatever happens."),
+    C("exp_c1", "Where would you like to live in five years?", ["A big city", "A suburb", "A small town", "The countryside"], { ord: 1, g: 1, big: 1 }),
+    C("exp_c2", "What should your life optimize for over the next ten years?", ["Careers and income", "A balance", "Time and freedom over money"], { ord: 1, g: 1 }),
+    C("exp_c3", "Pets?", ["Must have", "Would like", "Fine either way", "Rather not"], { ord: 1, g: 1 }),
+  ],
+  prompt: "Describe an ordinary Tuesday ten years from now.",
+  ask: ["What do you think will change once we’re married? What do you hope won’t?", "What does “for better or worse” mean to you in practice?", "What did your parents’ marriage teach you to expect?"] },
+
+{ id: "kids", title: "Children and parenting", ex: "kids",
+  intro: "Whether, when and how many, and what kind of parents you’d be.",
+  items: [
+    V("kid1", "I’m sure I want children."),
+    S("kid2", 1, "We’ve talked concretely about how many children we want and roughly when."),
+    S("kid3", -1, "I worry we would parent very differently."),
+    V("kid4", "Spanking is sometimes an appropriate punishment."),
+    S("kid5", 1, "I know how my partner feels about adoption or fertility treatment if we had trouble having kids."),
+    V("kid6", "When the kids’ needs and the marriage’s needs compete, the kids should come first."),
+    S("kid7", -1, "One of us is more eager to have kids than the other, and it worries me."),
+    V("kid8", "Children do best with a lot of structure and clear rules."),
+    S("kid9", 1, "I’d trust my partner as a co-parent in a hard moment."),
+    V("kid10", "Grandparents should be closely involved in raising our kids."),
+    C("kid_c1", "How many children would you like (in total)?", ["None", "One", "Two", "Three", "Four or more", "Not sure yet"], { ord: 1, unsure: 5, g: 1, big: 1 }),
+    C("kid_c2", "When would you want to start?", ["Within a year", "In 1 to 3 years", "In 3 to 5 years", "More than 5 years from now", "Doesn’t apply"], { ord: 1, na: 4, g: 1, big: 1 }),
+    C("kid_c3", "If you had trouble having children, what would you consider?", ["Adoption", "Fertility treatment", "Either", "Neither, we’d accept it", "Not sure"], { unsure: 4, g: 1 }),
+    C("kid_c4", "Screens for young children?", ["Strict limits", "Some, with rules", "Relaxed"], { ord: 1, g: 1 }),
+    C("kid_c5", "School?", ["Public school", "Private or religious school", "Homeschool", "No preference yet"], { unsure: 3, g: 1 }),
+  ],
+  prompt: "What do you want to give your kids that you got, or didn’t get, growing up?",
+  ask: ["How were you disciplined, and what would you keep or change?", "What would we do if one of us changed our mind about having kids?", "How would a child change how we split work and money?"] },
+
+{ id: "health", title: "Health and habits", ex: "health",
+  intro: "Drinking, screens, mental health, and looking after each other.",
+  items: [
+    S("health1", -1, "I’m concerned about my partner’s drinking or drug use."),
+    S("health2", 1, "We support each other’s health (sleep, exercise, food) without nagging."),
+    S("health3", -1, "One of us has a mental-health struggle we don’t talk about enough."),
+    S("health4", 1, "If I were struggling with depression or anxiety, I’d tell my partner."),
+    S("health5", -1, "Gambling, gaming, or impulse spending is a worry for us."),
+    S("health6", 1, "We agree about seeing doctors or therapists when we need to."),
+    S("health7", -1, "My partner’s phone use gets in the way of us."),
+    S("health8", 1, "We know each other’s health history, including family history."),
+    S("health9", -1, "Stress from work spills into our relationship more than I’d like."),
+    S("health10", 1, "I believe we could handle one of us having a serious long-term illness."),
+    C("health_c1", "Alcohol at home?", ["None", "Now and then", "Regularly with meals", "Most days"], { ord: 1, g: 1 }),
+    C("health_c2", "Phones in bed?", ["Never", "Briefly", "Sure"], { ord: 1, g: 1 }),
+    C("health_c3", "How do you see therapy?", ["Something almost everyone could use", "Useful when there’s a problem", "Not for me"], { ord: 1, g: 1 }),
+  ],
+  prompt: "What does support look like to you when you’re sick or low?",
+  ask: ["What health habits do you want us to build together?", "Where is the line between support and nagging for you?", "Is there anything in your health history I should know?"] },
+
+{ id: "blended", title: "Blended family", ex: "blended", when: hasKids,
+  intro: "Children from earlier relationships, stepparenting, and exes.",
+  items: [
+    S("blend1", 1, "The kids from our earlier relationships get along well with both of us."),
+    S("blend2", -1, "It isn’t clear how much authority a stepparent should have in our home."),
+    S("blend3", 1, "We agree on how to deal with the children’s other parent."),
+    S("blend4", -1, "Child support or money tied to a past relationship worries me."),
+    S("blend5", 1, "We’ve worked out how the kids will spend holidays and weekends."),
+    S("blend6", -1, "I sometimes feel like an outsider when my partner is with their children."),
+    S("blend7", 1, "The kids have been told about, and prepared for, our marriage."),
+    S("blend8", -1, "An ex causes tension between us."),
+    S("blend9", 1, "We agree on whether to have more children together."),
+    V("blend10", "A stepparent should discipline the kids just like a parent."),
+  ],
+  prompt: "What do the kids need most from the two of you this year?",
+  ask: ["What do you expect my role with your kids to be? What do I expect?", "How will we handle disagreements with an ex?", "What new traditions could make everyone feel part of one family?"] },
+];
+
+/* ---------- About each of you ---------- */
+const K = (id, dim, t, r) => ({ id, k: "s", dim, t, r: r ? 1 : 0 });
+const STAND = [
+  K("st1", "cm", "I see us together when we’re old."),
+  K("st2", "id", "My partner has never disappointed me."),
+  K("st3", "sp", "I say plainly what I’d like from my partner instead of dropping hints."),
+  K("st4", "av", "I’d rather let small problems slide than talk about them."),
+  K("st5", "sa", "I feel good about who I am, apart from this relationship."),
+  K("st6", "fc", "My partner makes most of the decisions for both of us."),
+  K("st7", "id", "There is nothing about my partner I would change if I could."),
+  K("st8", "cm", "When things get hard, I stay and work on it rather than look for a way out."),
+  K("st9", "sp", "I find it hard to say no to my partner.", 1),
+  K("st10", "av", "I put off hard conversations as long as I can."),
+  K("st11", "id", "Every misunderstanding we’ve had was cleared up right away."),
+  K("st12", "sa", "I often doubt I can handle what life throws at me.", 1),
+  K("st13", "fc", "I feel I need my partner’s OK before making plans of my own."),
+  K("st14", "cmp", "I believe my partner sees us together when we’re old."),
+  K("st15", "id", "I can’t think of a single habit of my partner’s that annoys me."),
+  K("st16", "sp", "I tell my partner when they’ve hurt my feelings."),
+  K("st17", "av", "When something feels off, I raise it soon.", 1),
+  K("st18", "id", "Our relationship is about as perfect as a relationship can be."),
+  K("st19", "sa", "I’m proud of where my life is heading."),
+  K("st20", "fc", "My partner respects it when I choose differently than they would.", 1),
+  K("st21", "id", "My partner and I have never had a real disagreement."),
+  K("st22", "cmp", "I believe my partner would stay and work on it when things get hard."),
+  K("st23", "id", "I have never had a single doubt about this relationship."),
+];
+const M = (id, dim, t, r) => ({ id, k: "s", dim, t, r: r ? 1 : 0 });
+const COUPLE_MAP = [
+  M("cm1", "cc", "We spend nearly all our free time together."),
+  M("cm2", "cf", "Our plans change often, and that’s fine with us."),
+  M("cm3", "cc", "I’d pick doing something with my partner over doing it alone, almost every time."),
+  M("cm4", "cf", "Who does which household job shifts around a lot."),
+  M("cm5", "cc", "We check with each other before making even small plans."),
+  M("cm6", "cf", "We have routines we both stick to.", 1),
+  M("cm7", "cc", "We each have plenty of friends and interests of our own.", 1),
+  M("cm8", "cf", "Decisions usually go to whoever feels most strongly at the time."),
+  M("cm9", "cc", "I feel uneasy when we’re apart for more than a day or two."),
+  M("cm10", "cf", "Once we agree on how to do something, we stick with it.", 1),
+];
+const FAMILY = [
+  M("fm1", "fc", "My family did almost everything together."),
+  M("fm2", "ff", "Rules at home changed depending on the day or someone’s mood."),
+  M("fm3", "fc", "Family loyalty came before nearly everything else."),
+  M("fm4", "ff", "My family had clear rules and consequences.", 1),
+  M("fm5", "fc", "In my family, people mostly went their own way.", 1),
+  M("fm6", "ff", "It wasn’t always clear who was in charge at home."),
+  M("fm7", "fc", "It was hard to have a life outside my family."),
+  M("fm8", "ff", "Once my parents decided something, they rarely changed their minds.", 1),
+  M("fm9", "fc", "We rarely talked about feelings or personal things.", 1),
+  M("fm10", "ff", "My family adapted easily when something unexpected happened."),
+  C("grow_c1", "My parents’ relationship while I was growing up:", ["Together the whole time", "Divorced or separated", "Never together", "One parent died", "Something else"], { fact: 1 }),
+  C("grow_c2", "When there was conflict at home, the mood was:", ["Calm; things got talked through", "Tense, but it blew over", "Loud or volatile", "Silent; nobody talked about it"], { fact: 1 }),
+  C("grow_c3", "Did a parent have a serious problem with alcohol or drugs?", ["No", "Yes", "Not sure", "I’d rather not say"], { fact: 1 }),
+];
+// Mini-IPIP: [trait, reversed, self wording, partner wording]
+const IPIP = [
+  ["E", 0, "am the life of the party", "is the life of the party"],
+  ["A", 0, "sympathize with others’ feelings", "sympathizes with others’ feelings"],
+  ["C", 0, "get chores done right away", "gets chores done right away"],
+  ["N", 0, "have frequent mood swings", "has frequent mood swings"],
+  ["I", 0, "have a vivid imagination", "has a vivid imagination"],
+  ["E", 1, "don’t talk a lot", "doesn’t talk a lot"],
+  ["A", 1, "am not interested in other people’s problems", "is not interested in other people’s problems"],
+  ["C", 1, "often forget to put things back in their proper place", "often forgets to put things back in their proper place"],
+  ["N", 1, "am relaxed most of the time", "is relaxed most of the time"],
+  ["I", 1, "am not interested in abstract ideas", "is not interested in abstract ideas"],
+  ["E", 0, "talk to a lot of different people at parties", "talks to a lot of different people at parties"],
+  ["A", 0, "feel others’ emotions", "feels others’ emotions"],
+  ["C", 0, "like order", "likes order"],
+  ["N", 0, "get upset easily", "gets upset easily"],
+  ["I", 1, "have difficulty understanding abstract ideas", "has difficulty understanding abstract ideas"],
+  ["E", 1, "keep in the background", "keeps in the background"],
+  ["A", 1, "am not really interested in others", "is not really interested in others"],
+  ["C", 1, "make a mess of things", "makes a mess of things"],
+  ["N", 1, "seldom feel blue", "seldom feels blue"],
+  ["I", 1, "do not have a good imagination", "does not have a good imagination"],
+];
+const SELF = IPIP.map((x, i) => ({ id: "me" + (i + 1), k: "s", sc: "acc", trait: x[0], r: x[1], t: "I " + x[2] + "." }));
+const OTHER = IPIP.map((x, i) => ({ id: "you" + (i + 1), k: "s", sc: "acc", trait: x[0], r: x[1], t: "{p} " + x[3] + "." }));
+const STRESSORS = [
+  ["work", "Work or school"], ["money", "Money"], ["health", "Your own health"], ["famhealth", "A family member’s health or problems"],
+  ["partner", "Your partner"], ["inlaws", "Parents or in-laws"], ["home", "Where you live"], ["sleep", "Not enough sleep"],
+  ["together", "Not enough time together"], ["alone", "Not enough time for yourself"], ["friends", "Friends"], ["commute", "Commuting"],
+  ["job", "Job security"], ["decision", "A big decision you have to make"], ["mood", "Feeling down or anxious"], ["exercise", "Not enough exercise"],
+  ["wedding", "Wedding planning", engaged], ["weddingfam", "Family opinions about the wedding", engaged],
+];
+const STRESS = STRESSORS.map(x => ({ id: "str_" + x[0], k: "s", sc: "freq", t: x[1], when: x[2] }));
+
+const ABOUT = [
+  { id: "stand", title: "Where you stand", ex: "checkin",
+    intro: "Commitment, how you handle yourself in the relationship, and a few deliberately extreme statements. Answer them honestly; perfect scores aren’t the goal.",
+    items: STAND },
+  { id: "map", title: "Closeness and flexibility", ex: "checkin",
+    intro: "How much togetherness you have, and how easily your routines and roles change. Neither end is better; the middle tends to work best.",
+    items: COUPLE_MAP },
+  { id: "growing", title: "Growing up", ex: "family",
+    intro: "The family you grew up in. These answers sit side by side in the results; they aren’t scored as agreement.",
+    items: FAMILY, prompt: "What do you want to bring from your family into yours, and what do you want to leave behind?" },
+  { id: "self", title: "Personality: you", ex: "personality",
+    intro: "Describe yourself as you generally are now, not as you wish to be. These are short public-domain personality items (the Mini-IPIP).",
+    items: SELF },
+  { id: "other", title: "Personality: {p}", ex: "personality",
+    intro: "Now describe {p} the same way, as they generally are. Afterwards you’ll each see how your view of yourself compares with your partner’s.",
+    items: OTHER },
+  { id: "stress", title: "Stress lately", ex: "stress",
+    intro: "Over the last few months, how often has each of these caused you stress?",
+    items: STRESS },
+];
+const SECTIONS = TOPICS.map(t => Object.assign({ group: "topic" }, t)).concat(ABOUT.map(t => Object.assign({ group: "about" }, t)));
+const SECTION_BY_ID = Object.fromEntries(SECTIONS.map(s => [s.id, s]));
+const ITEM_BY_ID = {};
+SECTIONS.forEach(s => s.items.forEach(it => { ITEM_BY_ID[it.id] = it; it.sec = s.id; }));
+
+const SAFETY = [
+  "I sometimes feel afraid of my partner.",
+  "My partner has pushed, hit, or physically hurt me.",
+  "My partner controls my money, my phone, or who I see.",
+  "I’ve felt pressured into sexual activity I didn’t want.",
+];
+
+const SCALES = {
+  agree: ["Strongly disagree", "Disagree", "Not sure", "Agree", "Strongly agree"],
+  acc: ["Very inaccurate", "Mostly inaccurate", "Neither", "Mostly accurate", "Very accurate"],
+  freq: ["Never", "Seldom", "Sometimes", "Often", "Very often"],
+};
+const PIPKEY = { agree: ["Strongly disagree", "Disagree", "Not sure", "Agree", "Strongly agree"] };
+
+/* ---------- Exercises (original) ---------- */
+const EX = {
+  listen: { t: "Ask, reflect, check", min: 20, why: "Practice being understood before anyone tries to solve anything.", steps: [
+    "Pick one mild item from your talk list. Set a 20-minute timer.",
+    "The speaker makes one point at a time, starting with “I feel…” or “I’d like…” rather than “You always…”.",
+    "The listener says it back in their own words and asks, “Did I get that right?” No defending and no fixing yet.",
+    "Keep going until the speaker says “Yes, that’s it.” Then swap roles.",
+    "Only when you both feel understood, list ideas for what to do about it." ] },
+  wish: { t: "More of, less of", min: 30, why: "Turn vague wishes into specific requests you can actually act on.", steps: [
+    "Separately, write three things you’d like more of and three you’d like less of. Make each one something you could see happen, like “a walk together after dinner twice a week”.",
+    "Take turns reading one item at a time. The listener repeats it back before responding.",
+    "Each of you picks one item from the other’s list to do this week.",
+    "A week later, check in: how did it go, and what’s next on the list?" ] },
+  checkin: { t: "The ten-minute check-in", min: 10, why: "Small, regular conversations keep big ones from piling up.", steps: [
+    "Pick a daily slot: after dinner, on a walk, before bed. Phones away.",
+    "Each answer three questions: What was the best part of your day? What’s on your mind? Is there anything you need from me tomorrow?",
+    "Listen without problem-solving unless asked.",
+    "Once a week, add one more: Is there anything between us we should talk about?" ] },
+  fight: { t: "A fair-fight plan", min: 30, why: "Agree on how to disagree while you’re calm, so you have a plan when you’re not.", steps: [
+    "Pick a time when neither of you is hungry, tired, or in front of other people.",
+    "Name the issue in one sentence, about one thing only.",
+    "Each of you says what you want and why it matters to you. The other reflects it back.",
+    "List at least four options without judging any of them.",
+    "Each say which options you could live with. Choose one to try, and decide who does what.",
+    "Set a date to check how it’s working. Thank each other for doing a hard thing." ] },
+  timeout: { t: "A time-out agreement", min: 15, why: "Breaks stop arguments from escalating, as long as you come back.", steps: [
+    "Agree on a word or signal that means “I need a break”.",
+    "Whoever calls the break says when they’ll come back: 20 minutes, an hour, tomorrow morning.",
+    "During the break, do something calming. Don’t rehearse your argument.",
+    "The person who called the break restarts the conversation at the agreed time.",
+    "If you need more than two breaks on the same topic, use the fair-fight plan." ] },
+  money: { t: "Money night", min: 60, why: "Get the numbers and the feelings about money on the table at the same time.", steps: [
+    "Each tell your money story: what money meant growing up, and one money mistake you’ve made.",
+    "Swap the numbers: income, debts, savings, and credit score.",
+    "Draft a rough monthly budget together, including fun money for each of you.",
+    "Settle your account setup and the amount above which you check with each other (your Decisions answers are a starting point).",
+    "Write down three shared money goals, each with a target date." ] },
+  dates: { t: "Take turns planning", min: 15, why: "Fun together usually needs a plan.", steps: [
+    "Alternate weeks planning one date or outing; the other just shows up.",
+    "Agree on a typical budget so neither of you worries about cost.",
+    "Once a month, do something neither of you has done before.",
+    "Afterwards, each name one moment you enjoyed." ] },
+  intimacy: { t: "Talking about sex", min: 30, why: "Being able to talk about sex makes changes in it much easier to handle.", steps: [
+    "Choose a relaxed time, not in bed and not right after a disappointment.",
+    "Each answer: What makes you feel desired? What would you like more of? Is there anything you’d like less of?",
+    "Compare your answers on how often, and talk about what a realistic rhythm looks like for both of you.",
+    "Agree how either of you can say no kindly, and how the other will hear it.",
+    "Plan to check in again in three months." ] },
+  chores: { t: "The chore map", min: 45, why: "Make invisible work visible, then split it on purpose.", steps: [
+    "List every recurring job, including the invisible ones: noticing, planning, remembering, booking.",
+    "Each mark who does it now and who you think should.",
+    "Compare with your Who-does-what results. Talk about the ones where you disagree.",
+    "Re-split based on preference, skill and time, not habit. Write it down.",
+    "Revisit the map in three months, or whenever life changes." ] },
+  family: { t: "Keep and leave behind", min: 30, why: "Decide on purpose which family patterns come with you.", steps: [
+    "Each list three things from your family you want to keep and three you want to leave behind.",
+    "Share them one at a time. Ask questions; don’t judge each other’s families.",
+    "Compare your Growing-up maps: how close and how flexible was each family?",
+    "Agree on one new tradition that belongs only to the two of you." ] },
+  personality: { t: "Two styles, one team", min: 30, why: "Personality differences are useful once you name them.", steps: [
+    "Pick the traits where you differ most.",
+    "For each, name one way the difference helps you as a team (the planner and the improviser, say).",
+    "Then name one place it rubs, and agree on a small rule for that situation.",
+    "Look at where your partner sees you differently than you see yourself. Ask for an example." ] },
+  stress: { t: "Change what you can", min: 30, why: "Stress shared is easier to carry.", steps: [
+    "Each list your top stressors from the results.",
+    "Sort them into ones you can change and ones you can’t.",
+    "For each one you can change, pick a single step for this week.",
+    "For each one you can’t, tell your partner what helps: listening, taking over a task, or giving space." ] },
+  future: { t: "Ten years from now", min: 30, why: "Shared pictures of the future surface hidden expectations.", steps: [
+    "Separately, write a paragraph describing an ordinary Tuesday ten years from now: where you live, who’s there, what you each do all day.",
+    "Read them aloud to each other.",
+    "Note what matches, what surprised you, and anything that conflicts.",
+    "Pick one step toward the shared parts that you could take this year." ] },
+  kids: { t: "Parenting preview", min: 45, why: "Talk through parenting before there’s a crying child in the room.", steps: [
+    "Each describe how you were disciplined and what you’d keep or change.",
+    "Talk through three scenes: a toddler meltdown in a shop, a ten-year-old who lies, a sixteen-year-old who breaks curfew.",
+    "Compare your answers on how many, when, and what if it doesn’t happen easily.",
+    "Write down two parenting principles you both agree on." ] },
+  meaning: { t: "What we stand for", min: 30, why: "A short shared statement of values guides a lot of decisions.", steps: [
+    "Each write down five values that matter most to you.",
+    "Circle the ones you share, and talk about the ones you don’t.",
+    "Write two or three sentences together about what your household stands for.",
+    "Decide how you’ll handle holidays, ceremonies and family expectations around belief." ] },
+  health: { t: "Health agreements", min: 30, why: "Agreeing in advance turns nagging into support.", steps: [
+    "Share your health histories, including family history and mental health.",
+    "Talk through drinking, screens and sleep. What would each of you like your home to be like?",
+    "Each say what support looks like for you, and what feels like nagging.",
+    "Agree on one healthy habit to build together this month." ] },
+  blended: { t: "Family logistics", min: 45, why: "Clear plans protect the kids and the marriage.", steps: [
+    "Put custody schedules, holidays and school events on one shared calendar.",
+    "Agree on the stepparent’s role for now: friend, mentor, or co-parent. Revisit it as the kids grow.",
+    "Decide how you’ll talk about and communicate with each ex.",
+    "Plan one regular activity for the whole new family." ] },
+};
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const STORE = "bearings:v1";
+let data = blankData();
+let ui = { screen: "home", sec: null, tab: "overview", topic: null, sample: null, sampleTalk: { star: {}, done: {} }, flash: null, confirmReset: false, finishWarn: false, talkFilter: "all", importMsg: null, code: null, editing: false };
+
+function blankData() { return { v: 1, mode: "own", active: "a", people: { a: null, b: null }, talk: { star: {}, done: {} } }; }
+function load() {
+  try {
+    const s = localStorage.getItem(STORE);
+    if (s) { const d = JSON.parse(s); if (d && d.v === 1 && d.people) data = Object.assign(blankData(), d); }
+  } catch (e) { /* storage blocked: work in memory */ }
+}
+function save() { try { localStorage.setItem(STORE, JSON.stringify(data)); } catch (e) {} }
+
+const me = () => data.people[data.active];
+const otherKey = () => (data.active === "a" ? "b" : "a");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const fill = (t, p) => t.replace(/\{p\}/g, esc((p && p.partner) || "your partner"));
+const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+const pct = a => (a.length ? Math.round((avg(a) - 1) / 4 * 100) : null);
+const isRequired = it => it.k === "s" || it.k === "c" || it.k === "w";
+const visSecs = p => SECTIONS.filter(s => !s.when || s.when(p.setup));
+const visItems = (s, p) => s.items.filter(it => !it.when || it.when(p.setup));
+
+function progress(p) {
+  let total = 0, done = 0;
+  const per = {};
+  visSecs(p).forEach(s => {
+    let t = 0, d = 0;
+    visItems(s, p).forEach(it => { if (!isRequired(it)) return; t++; if (p.ans[it.id] != null) d++; });
+    per[s.id] = { t, d };
+    total += t; done += d;
+  });
+  return { total, done, per };
+}
+function newPerson(name, partner, setup) { return { name, partner, setup, ans: {}, gs: {}, open: {}, done: false, started: Date.now() }; }
+
+/* =====================================================================
+   ANSWER CODES: JSON, deflated, base64url. Decoded entirely in the browser.
+   ===================================================================== */
+function b64u(bytes) {
+  let s = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function unb64u(str) {
+  const s = str.replace(/-/g, "+").replace(/_/g, "/");
+  const bin = atob(s + "===".slice((s.length + 3) % 4));
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+async function pipe(bytes, stream) {
+  const w = stream.writable.getWriter(); w.write(bytes); w.close();
+  return new Uint8Array(await new Response(stream.readable).arrayBuffer());
+}
+async function encodePerson(p) {
+  const json = JSON.stringify({ v: 1, n: p.name, pn: p.partner, su: p.setup, a: p.ans, g: p.gs, o: p.open });
+  const bytes = new TextEncoder().encode(json);
+  try { if (window.CompressionStream) return "BRG1." + b64u(await pipe(bytes, new CompressionStream("deflate-raw"))); } catch (e) {}
+  return "BRG0." + b64u(bytes);
+}
+async function decodePerson(code) {
+  const c = String(code || "").replace(/\s+/g, "");
+  const m = /^BRG([01])\.([A-Za-z0-9_-]+)$/.exec(c);
+  if (!m) throw new Error("That doesn’t look like a Bearings answer code. It should start with BRG1. or BRG0.");
+  let bytes = unb64u(m[2]);
+  if (m[1] === "1") {
+    if (!window.DecompressionStream) throw new Error("This browser can’t unpack compressed codes. Try a current version of Chrome, Safari, Firefox or Edge.");
+    bytes = await pipe(bytes, new DecompressionStream("deflate-raw"));
+  }
+  const d = JSON.parse(new TextDecoder().decode(bytes));
+  if (!d || d.v !== 1 || !d.n || typeof d.a !== "object") throw new Error("The code was read, but it doesn’t contain a complete set of answers.");
+  return { name: String(d.n).slice(0, 40), partner: String(d.pn || "").slice(0, 40), setup: d.su || {}, ans: d.a || {}, gs: d.g || {}, open: d.o || {}, done: true, imported: Date.now() };
+}
+
+/* =====================================================================
+   SCORING
+   Statements use the same agreement rules as published couple inventories:
+   agree = same side of "not sure", in the healthy direction (or either side for values);
+   differ = two or more points apart; unsure = one or both not sure and otherwise close;
+   shared concern = both on the unhealthy side.
+   ===================================================================== */
+function compareStatement(a, b, p) {
+  if (Math.abs(a - b) >= 2) return "differ";
+  if (a === 3 || b === 3) return "unsure";
+  if (!p) return "agree";
+  const agreeSide = a >= 4;
+  return (p > 0 ? agreeSide : !agreeSide) ? "agree" : "concern";
+}
+function compareChoice(it, a, b) {
+  if (it.k === "w") b = 4 - b; // put the partner's answer on the same side
+  if (it.unsure != null && (a === it.unsure || b === it.unsure)) return "unsure";
+  if (it.na != null && (a === it.na || b === it.na)) return a === b ? "same" : "far";
+  if (a === b) return "same";
+  if (it.ord || it.k === "w") return Math.abs(a - b) === 1 ? "close" : "far";
+  return "differ";
+}
+const CAT_LABEL = { agree: "Agree", differ: "Differ", unsure: "Unsure", concern: "Shared concern", same: "Same", close: "Close", far: "Far apart" };
+function band(p) {
+  if (p >= 80) return { k: "strong", label: "Strength" };
+  if (p >= 50) return { k: "good", label: "Likely strength" };
+  if (p >= 30) return { k: "mid", label: "Worth discussing" };
+  return { k: "low", label: "Talk about first" };
+}
+function healthy(it, v) { return it.p > 0 ? v : 6 - v; }
+function scoreDim(p, items, dim) {
+  const vals = items.filter(it => it.dim === dim && p.ans[it.id] != null).map(it => (it.r ? 6 - p.ans[it.id] : p.ans[it.id]));
+  return pct(vals);
+}
+function mapSum(p, dim) {
+  const its = SECTION_BY_ID[dim[0] === "c" ? "map" : "growing"].items.filter(it => it.dim === dim);
+  if (its.some(it => p.ans[it.id] == null)) return null;
+  return its.reduce((s, it) => s + (it.r ? 6 - p.ans[it.id] : p.ans[it.id]), 0);
+}
+const MAP_LO = [5, 9, 13, 17, 21], MAP_HI = [8, 12, 16, 20, 25];
+function mapLevel(sum) { for (let i = 0; i < 5; i++) if (sum <= MAP_HI[i]) return i + 1; return 5; }
+function mapPos(sum) { const L = mapLevel(sum); return (L - 1) + (sum - MAP_LO[L - 1] + 0.5) / (MAP_HI[L - 1] - MAP_LO[L - 1] + 1); }
+const CLOSE_L = ["Disconnected", "Independent", "Connected", "Close-knit", "Enmeshed"];
+const FLEX_L = ["Rigid", "Structured", "Flexible", "Very flexible", "Chaotic"];
+const CLOSE_D = [
+  "lots of separateness and little emotional connection.",
+  "a strong sense of self with real connection. Healthy, leaning independent.",
+  "a healthy balance of “I” and “we”.",
+  "a lot of togetherness, still with room to be individuals. Healthy, leaning close.",
+  "so much togetherness that individual needs and outside friendships get squeezed.",
+];
+const FLEX_D = [
+  "fixed routines and roles that resist change, even when change is needed.",
+  "clear routines with some room to adjust. Healthy, leaning stable.",
+  "a healthy balance of stability and change.",
+  "easy adaptation with enough structure to stay steady. Healthy, leaning open.",
+  "so much change that plans, roles and rules feel unpredictable.",
+];
+const TRAITS = [
+  { k: "E", name: "Outgoing", lo: "Quiet, reserved", hi: "Sociable, energized by people" },
+  { k: "A", name: "Warm", lo: "Direct, skeptical", hi: "Caring, attuned to others" },
+  { k: "C", name: "Orderly", lo: "Flexible, spontaneous", hi: "Organized, gets things done" },
+  { k: "N", name: "Steady", lo: "Sensitive, feels things strongly", hi: "Calm, even-keeled", flip: 1 },
+  { k: "I", name: "Curious", lo: "Practical, concrete", hi: "Imaginative, likes ideas" },
+];
+function traitScore(p, prefix, k, flip) {
+  const its = (prefix === "me" ? SELF : OTHER).filter(it => it.trait === k && p.ans[it.id] != null);
+  const s = pct(its.map(it => (it.r ? 6 - p.ans[it.id] : p.ans[it.id])));
+  return s == null ? null : flip ? 100 - s : s;
+}
+const level3 = s => (s == null ? "–" : s < 34 ? "Low" : s <= 66 ? "Moderate" : "High");
+const DYN = [
+  { k: "sp", name: "Speaking up", d: { Low: "finds it hard to ask for what they want or say when something hurts.", Moderate: "speaks up about some things and holds back on others.", High: "asks for what they want and says when something hurts." } },
+  { k: "sa", name: "Self-assurance", d: { Low: "doubts themselves a fair amount right now.", Moderate: "feels reasonably good about themselves and where life is going.", High: "feels good about who they are and where life is going." } },
+  { k: "av", name: "Avoiding issues", d: { Low: "tends to raise problems early.", Moderate: "raises some problems and lets others slide.", High: "tends to let problems slide and put off hard conversations." } },
+  { k: "fc", name: "Feeling controlled", d: { Low: "feels free to make their own choices.", Moderate: "sometimes feels their partner steers decisions.", High: "often feels their partner makes the decisions or needs to approve their plans." } },
+];
+
+function analyzeTopic(t, A, B) {
+  const rows = []; let agree = 0, n = 0; const ia = [], ib = [];
+  t.items.forEach(it => {
+    const a = A.ans[it.id], b = B.ans[it.id];
+    if (a == null || b == null) return;
+    if (it.k === "s") {
+      const cat = compareStatement(a, b, it.p);
+      rows.push({ it, a, b, cat }); n++; if (cat === "agree") agree++;
+      if (it.p) { ia.push(healthy(it, a)); ib.push(healthy(it, b)); }
+    } else {
+      rows.push({ it, a, b, cat: compareChoice(it, a, b), ga: A.gs[it.id], gb: B.gs[it.id] });
+    }
+  });
+  return { t, rows, n, pca: n ? Math.round(agree / n * 100) : null, indA: pct(ia), indB: pct(ib) };
+}
+function priority(r) {
+  if (r.it.k === "s") {
+    if (r.cat === "concern") return 4;
+    if (r.cat === "differ") return Math.abs(r.a - r.b) >= 3 ? 3.5 : 2.5;
+    if (r.cat === "unsure") return 1;
+    return 0;
+  }
+  if (r.cat === "far") return r.it.big ? 5 : 3;
+  if (r.cat === "differ") return r.it.big ? 4 : 2;
+  if (r.cat === "unsure") return r.it.big ? 3 : 1;
+  return 0;
+}
+function guessMiss(r) { return (r.ga != null && r.ga !== r.b) || (r.gb != null && r.gb !== r.a); }
+
+function analyze(A, B) {
+  const topics = TOPICS.map(t => analyzeTopic(t, A, B)).filter(x => x.rows.length);
+  const scored = topics.filter(x => x.pca != null);
+  const overall = scored.length ? Math.round(avg(scored.map(x => x.pca))) : null;
+  const talk = [];
+  topics.forEach(x => x.rows.forEach(r => {
+    let pr = priority(r);
+    const miss = r.it.k === "c" && guessMiss(r);
+    if (miss) pr = Math.max(pr, 0.8) + 0.3;
+    if (pr > 0) talk.push(Object.assign({ pr, miss, topic: x.t }, r));
+  }));
+  talk.sort((x, y) => y.pr - x.pr || TOPICS.indexOf(x.topic) - TOPICS.indexOf(y.topic));
+  const guesses = { a: [0, 0], b: [0, 0] };
+  topics.forEach(x => x.rows.forEach(r => {
+    if (r.it.k !== "c") return;
+    if (r.ga != null) { guesses.a[1]++; if (r.ga === r.b) guesses.a[0]++; }
+    if (r.gb != null) { guesses.b[1]++; if (r.gb === r.a) guesses.b[0]++; }
+  }));
+  const ideal = { a: scoreDim(A, STAND, "id"), b: scoreDim(B, STAND, "id") };
+  return { A, B, topics, overall, talk, guesses, ideal };
+}
+
+/* =====================================================================
+   SAMPLE COUPLE (fictional, generated from a fixed seed)
+   ===================================================================== */
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function makeSample() {
+  const R = rng(20270501);
+  const pick = arr => arr[Math.floor(R() * arr.length)];
+  const clamp = v => Math.max(1, Math.min(5, v));
+  const setup = { stage: "engaged", cohab: "yes", kids: "none", guess: true };
+  const A = Object.assign(newPerson("Avery", "Theo", Object.assign({}, setup)), { done: true });
+  const B = Object.assign(newPerson("Theo", "Avery", Object.assign({}, setup)), { done: true });
+  const harmony = { talk: 0.5, fight: 0.3, style: 0.6, money: 0.6, time: 0.9, sex: 0.7, family: 0.4, roles: 0.8, meaning: 0.9, expect: 0.7, kids: 0.6, health: 0.8 };
+  TOPICS.forEach(t => {
+    if (t.when && !t.when(setup)) return;
+    const h = harmony[t.id];
+    t.items.forEach(it => {
+      if (it.when && !it.when(setup)) return;
+      if (it.k === "s") {
+        const good = it.p >= 0 ? pick([4, 4, 5]) : pick([2, 2, 1]);
+        const bad = it.p >= 0 ? pick([2, 1]) : pick([4, 5]);
+        const roll = R();
+        if (roll < h) { A.ans[it.id] = good; B.ans[it.id] = clamp(good + pick([0, 0, it.p >= 0 ? 1 : -1])); }
+        else if (roll < h + (1 - h) * 0.5) { A.ans[it.id] = good; B.ans[it.id] = bad; if (R() < 0.5) [A.ans[it.id], B.ans[it.id]] = [B.ans[it.id], A.ans[it.id]]; }
+        else if (roll < h + (1 - h) * 0.8) { A.ans[it.id] = 3; B.ans[it.id] = clamp(3 + pick([-1, 0, 1])); }
+        else { A.ans[it.id] = bad; B.ans[it.id] = clamp(bad + pick([-1, 0, 1])); if (Math.abs(A.ans[it.id] - 3) < 1) B.ans[it.id] = bad; }
+        if (!it.p) { const v = pick([2, 4, 4, 5]); A.ans[it.id] = v; B.ans[it.id] = R() < h ? clamp(v + pick([0, 1, -1])) : 6 - v; if (B.ans[it.id] === 3) B.ans[it.id] = 2; }
+      } else if (it.k === "c") {
+        const n = it.o.length;
+        const a = Math.floor(R() * Math.min(n, it.unsure != null || it.na != null ? n - 1 : n));
+        let b = R() < h ? a : (it.ord ? Math.max(0, Math.min(n - 1, a + pick([-1, 1]))) : Math.floor(R() * n));
+        if (it.unsure != null && b === it.unsure) b = a;
+        A.ans[it.id] = a; B.ans[it.id] = b;
+        A.gs[it.id] = R() < 0.65 ? b : Math.floor(R() * n);
+        B.gs[it.id] = R() < 0.55 ? a : Math.floor(R() * n);
+      } else if (it.k === "w") {
+        const a = pick([0, 1, 2, 2, 3, 4]); A.ans[it.id] = a;
+        B.ans[it.id] = Math.max(0, Math.min(4, 4 - a + (R() < 0.6 ? 0 : pick([-1, 1]))));
+      }
+    });
+  });
+  // Planted results so the sample shows every kind of finding.
+  const plant = { money_c1: [1, 3, 1, 1], kid_c1: [2, 2, 2, 2], kid_c2: [1, 3, 1, 1], sex_c1: [1, 0, 1, 1], fam_c3: [1, 3, 3, 1], exp_c1: [1, 1, 1, 1], mean_c1: [2, 3, 3, 2], fight_c3: [0, 2, 0, 0] };
+  Object.entries(plant).forEach(([id, v]) => { A.ans[id] = v[0]; B.ans[id] = v[1]; A.gs[id] = v[2]; B.gs[id] = v[3]; });
+  Object.assign(A.ans, { fight2: 4, fight10: 4, talk6: 4, money4: 2, role4: 4 });
+  Object.assign(B.ans, { fight2: 4, fight10: 2, talk6: 2, money4: 4, role4: 2 });
+  Object.assign(A.ans, { role_w1: 3, role_w2: 2, role_w3: 0, role_w4: 0, role_w5: 2, role_w6: 2, role_w7: 4, sex_w1: 2 });
+  Object.assign(B.ans, { role_w1: 1, role_w2: 1, role_w3: 4, role_w4: 2, role_w5: 2, role_w6: 2, role_w7: 0, sex_w1: 1 });
+  // About each of you.
+  const standA = { cm: 5, cmp: 5, id: 2, sp: 4, sa: 4, av: 2, fc: 2 }, standB = { cm: 5, cmp: 4, id: 4, sp: 3, sa: 4, av: 4, fc: 1 };
+  STAND.forEach(it => { const base = (p) => p[it.dim]; [[A, standA], [B, standB]].forEach(([P, s]) => { const v = clamp(base(s) + pick([0, 0, 1, -1])); P.ans[it.id] = it.r ? 6 - v : v; }); });
+  const mapT = { a: { cc: 15, cf: 13, fc: 19, ff: 8 }, b: { cc: 18, cf: 15, fc: 10, ff: 17 } };
+  [[A, mapT.a], [B, mapT.b]].forEach(([P, m]) => {
+    ["cc", "cf", "fc", "ff"].forEach(dim => {
+      const its = (dim[0] === "c" ? COUPLE_MAP : FAMILY).filter(it => it.dim === dim);
+      let left = m[dim];
+      its.forEach((it, i) => { const remaining = its.length - i; const v = i === its.length - 1 ? clamp(left) : clamp(Math.round(left / remaining + pick([-1, 0, 1]))); left -= v; P.ans[it.id] = it.r ? 6 - v : v; });
+    });
+  });
+  Object.assign(A.ans, { grow_c1: 0, grow_c2: 1, grow_c3: 0 });
+  Object.assign(B.ans, { grow_c1: 1, grow_c2: 2, grow_c3: 0 });
+  const persA = { E: 2, A: 4, C: 5, N: 3, I: 4 }, persB = { E: 5, A: 4, C: 2, N: 2, I: 3 };
+  IPIP.forEach((x, i) => {
+    const set = (P, id, base) => { const v = clamp(base + pick([0, 0, 1, -1])); P.ans[id] = x[1] ? 6 - v : v; };
+    set(A, "me" + (i + 1), persA[x[0]]); set(B, "me" + (i + 1), persB[x[0]]);
+    set(A, "you" + (i + 1), persB[x[0]] + (x[0] === "N" ? 1 : 0)); set(B, "you" + (i + 1), persA[x[0]] + (x[0] === "E" ? 1 : 0));
+  });
+  STRESS.forEach(it => { A.ans[it.id] = pick([1, 2, 2, 3]); B.ans[it.id] = pick([1, 2, 3, 3]); });
+  Object.assign(A.ans, { str_work: 4, str_wedding: 5, str_sleep: 4 });
+  Object.assign(B.ans, { str_money: 4, str_wedding: 4, str_job: 5 });
+  A.open = { talk: "I go quiet when I’m upset, but I do want to talk. I just need an hour first.", money: "Money was always tight, so I like having a cushion. Spending it makes me anxious.", expect: "Coffee on the porch, kids at school, both of us working but home by six.", growing: "Keep: big family dinners. Leave behind: never talking about anything uncomfortable." };
+  B.open = { talk: "When I push to talk right away it’s because silence makes me nervous, not because I want a fight.", money: "We never talked about money at all. I learned everything the hard way.", expect: "Living somewhere with mountains, working remotely, a dog, maybe one kid.", growing: "Keep: how my mom made every birthday a big deal. Leave behind: the yelling." };
+  return { A, B };
+}
+
+/* =====================================================================
+   RENDERING
+   ===================================================================== */
+const app = document.getElementById("app");
+const LOGO = `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4.5 L19.2 16 L16 27.5 L12.8 16 Z" fill="var(--pa)"/><path d="M16 4.5 L19.2 16 L12.8 16 Z" fill="var(--pb)"/><circle cx="16" cy="16" r="1.8" fill="var(--paper)"/></svg>`;
+
+function render() {
+  const s = ui.screen;
+  let main = "";
+  if (s === "home") main = renderHome();
+  else if (s === "section") main = renderSection();
+  else if (s === "share") main = renderShare();
+  else if (s === "import") main = renderImport();
+  else if (s === "handoff") main = renderHandoff();
+  else if (s === "safety") main = renderSafety();
+  else if (s === "results") main = renderResults();
+  else if (s === "about") main = renderAbout();
+  app.innerHTML = renderBar() + main;
+}
+
+function renderBar() {
+  const p = me();
+  const canResults = !!resultsPair() || ui.sample;
+  const nav = [];
+  if (p) nav.push(`<button class="navbtn" data-act="go" data-to="home" ${["home", "section", "share", "import", "handoff", "safety"].includes(ui.screen) && !ui.sample ? 'aria-current="page"' : ""}>Questions</button>`);
+  if (canResults) nav.push(`<button class="navbtn" data-act="go" data-to="results" ${ui.screen === "results" ? 'aria-current="page"' : ""}>Results</button>`);
+  nav.push(`<button class="navbtn" data-act="go" data-to="about" ${ui.screen === "about" ? 'aria-current="page"' : ""}>How it works</button>`);
+  return `<header class="bar"><div class="bar-in"><button class="brand" data-act="go" data-to="home">${LOGO}Bearings</button><nav class="bar-nav" aria-label="Main">${nav.join("")}</nav></div></header>`;
+}
+
+function resultsPair() {
+  const a = data.people.a, b = data.people.b;
+  if (!a || !b || !a.done || !b.done) return null;
+  return data.active === "a" ? [a, b] : [b, a];
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  const p = me();
+  if (!p || ui.editing) return renderStart();
+  const pr = progress(p);
+  const left = pr.total - pr.done;
+  const mins = Math.max(1, Math.round(left * 7 / 60));
+  const o = data.people[otherKey()];
+  const pair = resultsPair();
+  const secs = visSecs(p);
+  const nextSec = secs.find(s => pr.per[s.id].d < pr.per[s.id].t) || secs[0];
+  const row = s => {
+    const q = pr.per[s.id], complete = q.d === q.t;
+    return `<button class="secrow ${complete ? "complete" : ""}" data-act="open" data-sec="${s.id}"><span>${esc(fill(s.title, p))}</span><span class="n">${complete ? "Done" : q.d + " / " + q.t}</span><span class="prog"><i style="width:${q.t ? q.d / q.t * 100 : 0}%"></i></span></button>`;
+  };
+  let partnerCard;
+  if (data.mode === "shared") {
+    const op = o ? progress(o) : null;
+    partnerCard = `<div class="card stack"><div class="who"><span class="dot b"></span>${esc(p.partner)}</div>
+      <p>${!o ? "Hasn’t started yet." : o.done ? "Finished." : `${op.done} of ${op.total} answered.`}</p>
+      <div class="row-wrap">${o && o.done ? "" : `<button class="btn" data-act="handoff">${o ? "Switch to " + esc(p.partner) : "Hand over to " + esc(p.partner)}</button>`}</div>
+      <p class="small muted">You’re taking turns on this device. Each of you sees only your own answers until you’ve both finished.</p></div>`;
+  } else {
+    partnerCard = `<div class="card stack"><div class="who"><span class="dot b"></span>${esc(p.partner)}</div>
+      <p>${o ? `Answers added ${o.imported ? "on " + new Date(o.imported).toLocaleDateString() : ""}.` : `Not added yet. ${esc(p.partner)} answers on their own phone, then sends you their answer code.`}</p>
+      <div class="row-wrap"><button class="btn" data-act="go" data-to="import">${o ? "Update" : "Add"} ${esc(p.partner)}’s answers</button>
+      ${p.done ? `<button class="btn" data-act="share">Share my answers</button>` : ""}</div></div>`;
+  }
+  return `<main class="wrap stack-lg">
+    ${ui.flash ? `<div class="notice good" role="status">${esc(ui.flash)}</div>` : ""}
+    <section class="stack">
+      <p class="eyebrow">Answering as</p>
+      <div class="row-wrap" style="justify-content:space-between"><h1 style="font-size:clamp(2rem,6vw,2.8rem)">${esc(p.name)}</h1>
+      ${data.mode === "shared" && o ? `<button class="btn ghost" data-act="handoff">Switch to ${esc(p.partner)}</button>` : ""}</div>
+      <div class="prog"><i style="width:${pr.total ? pr.done / pr.total * 100 : 0}%"></i></div>
+      <p class="muted">${pr.done} of ${pr.total} answered${left ? ` · about ${mins} minute${mins === 1 ? "" : "s"} left. Your answers save as you go, so you can stop any time.` : "."}</p>
+      <div class="row-wrap">
+        ${p.done ? `<span class="chip agree">You’ve finished</span>` : left ? `<button class="btn primary" data-act="open" data-sec="${nextSec.id}">${pr.done ? "Continue" : "Start"}: ${esc(fill(nextSec.title, p))}</button>` : `<button class="btn primary" data-act="finish">Finish</button>`}
+        ${pair ? `<button class="btn primary" data-act="go" data-to="results">See your results</button>` : ""}
+        ${!p.done && pr.done > 0 && left ? `<button class="btn ghost" data-act="finish">Finish now</button>` : ""}
+      </div>
+      ${ui.finishWarn ? `<div class="notice warn stack"><p>You have ${left} unanswered question${left === 1 ? "" : "s"}. Unanswered questions are simply left out of the comparison.</p><div class="row-wrap"><button class="btn primary" data-act="finish" data-force="1">Finish anyway</button><button class="btn ghost" data-act="finishCancel">Keep answering</button></div></div>` : ""}
+    </section>
+    <div class="grid2">
+      <section class="stack"><h3>Topics</h3><div class="secgroup">${secs.filter(s => s.group === "topic").map(row).join("")}</div></section>
+      <section class="stack"><h3>About each of you</h3><div class="secgroup">${secs.filter(s => s.group === "about").map(row).join("")}</div>
+        <button class="secrow" data-act="go" data-to="safety"><span>A private check</span><span class="n">Not saved</span></button>
+        ${partnerCard}
+      </section>
+    </div>
+    <section class="stack small muted">
+      <div class="row-wrap"><button class="linkbtn" data-act="edit">Change names or setup</button><span>·</span><button class="linkbtn" data-act="sample">See a sample report</button><span>·</span><button class="linkbtn danger" data-act="reset">Delete everything on this device</button></div>
+      ${ui.confirmReset ? `<div class="notice bad stack"><p>This deletes both people’s answers from this device. It can’t be undone. If you might need them later, share your answer code first and save it somewhere.</p><div class="row-wrap"><button class="btn danger" data-act="reset" data-force="1">Delete everything</button><button class="btn ghost" data-act="resetCancel">Cancel</button></div></div>` : ""}
+    </section>
+  </main>`;
+}
+
+function renderStart() {
+  const p = me();
+  const su = (p && p.setup) || { stage: "engaged", cohab: "no", kids: "none", guess: true };
+  const seg = (name, opts, val) => `<div class="seg" role="radiogroup">${opts.map(([v, l]) => `<label><input type="radio" name="${name}" value="${v}" ${String(val) === String(v) ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>`;
+  return `<main class="wrap stack-lg">
+    <section class="hero">
+      <p class="eyebrow">A do-it-yourself premarital inventory</p>
+      <h1>Find out where you stand, together.</h1>
+      <p class="lede">You each answer about 270 questions on your own, in two or three sittings. Then Bearings puts your answers side by side and shows you what to talk about.</p>
+      <div class="gets">
+        <div class="get"><b>12 topics</b>Communication, conflict, money, sex, family, roles, beliefs, kids and more, each scored by how much you agree.</div>
+        <div class="get"><b>Your talk list</b>The exact questions you answered differently, ranked so the important ones come first.</div>
+        <div class="get"><b>Real decisions</b>Kids, money, where to live. Guess each other’s answers and see who knows whom.</div>
+        <div class="get"><b>Maps and personality</b>Closeness, flexibility, the families you grew up in, and how you see each other.</div>
+      </div>
+      <p class="small muted">No account and no server. Answers stay on your device until you choose to send them. Not a test and not a prediction: it’s a structured way to start the conversations that matter.</p>
+      <div><button class="btn" data-act="sample">See a sample report first</button></div>
+    </section>
+    <form class="card form" id="setup" autocomplete="off">
+      <h2>${p ? "Change your setup" : "Set up"}</h2>
+      <div class="two">
+        <label class="field"><span>Your first name</span><input type="text" id="f-name" name="name" maxlength="30" required value="${esc(p ? p.name : "")}"></label>
+        <label class="field"><span>Your partner’s first name</span><input type="text" id="f-partner" name="partner" maxlength="30" required value="${esc(p ? p.partner : "")}"></label>
+      </div>
+      <div class="field"><span>Where are you now?</span>${seg("stage", [["dating", "Seriously dating"], ["engaged", "Engaged"], ["married", "Married"]], su.stage)}</div>
+      <div class="field"><span>Do you live together?</span>${seg("cohab", [["yes", "Yes"], ["no", "No"]], su.cohab)}</div>
+      <div class="field"><span>Children from a previous relationship?</span>${seg("kids", [["none", "None"], ["mine", "I do"], ["theirs", "My partner does"], ["both", "We both do"]], su.kids)}</div>
+      ${p ? "" : `<div class="field"><span>How will you take it?</span>${seg("mode", [["own", "Each on our own phone"], ["shared", "Taking turns on this device"]], "own")}<span class="small muted" style="font-weight:400">Separate phones work best: nobody can glance at the other’s answers. You’ll swap answer codes at the end.</span></div>`}
+      <div class="field"><span>Guess each other’s answers on decision questions?</span>${seg("guess", [["1", "Yes"], ["0", "No"]], su.guess ? "1" : "0")}<span class="small muted" style="font-weight:400">Optional, and often the most revealing part.</span></div>
+      <div class="row-wrap"><button class="btn primary" type="submit">${p ? "Save" : "Start answering"}</button>${p ? `<button class="btn ghost" type="button" data-act="editCancel">Cancel</button>` : ""}</div>
+    </form>
+  </main>`;
+}
+
+/* ---------- Questionnaire ---------- */
+function itemHTML(it, p) {
+  const v = p.ans[it.id];
+  const pressed = i => `aria-pressed="${v === i}"`;
+  let body = "";
+  if (it.k === "s") {
+    const labels = SCALES[it.sc || "agree"];
+    body = `<div class="scale" data-grp role="group" aria-label="${esc(fill(it.t, p))}">${labels.map((l, i) => `<button type="button" class="opt" data-act="ans" data-id="${it.id}" data-v="${i + 1}" ${pressed(i + 1)}><b>${i + 1}</b><span>${l}</span></button>`).join("")}</div>`;
+  } else if (it.k === "c") {
+    body = `<div class="choices" data-grp role="group">${it.o.map((o, i) => `<button type="button" class="choice" data-act="ans" data-id="${it.id}" data-v="${i}" ${pressed(i)}>${esc(o)}</button>`).join("")}</div>`;
+    if (it.g && p.setup.guess) {
+      const g = p.gs[it.id];
+      body += `<div class="guess" ${v == null ? "hidden" : ""}><p class="small"><b>Your guess:</b> what will ${esc(p.partner)} pick?</p><div class="choices" data-grp>${it.o.map((o, i) => `<button type="button" class="choice" data-act="guess" data-id="${it.id}" data-v="${i}" aria-pressed="${g === i}">${esc(o)}</button>`).join("")}</div></div>`;
+    }
+  } else if (it.k === "w") {
+    const opts = ["Me", "Mostly me", "Both equally", "Mostly " + p.partner, p.partner];
+    body = `<div class="whogrid" data-grp role="group">${opts.map((o, i) => `<button type="button" class="choice" style="text-align:center" data-act="ans" data-id="${it.id}" data-v="${i}" ${pressed(i)}>${esc(o)}</button>`).join("")}</div>`;
+  }
+  return `<div class="q" id="q-${it.id}"><p class="qt">${esc(fill(it.t, p))}</p>${body}</div>`;
+}
+
+function renderSection() {
+  const p = me();
+  const secs = visSecs(p);
+  const i = Math.max(0, secs.findIndex(s => s.id === ui.sec));
+  const sec = secs[i];
+  const items = visItems(sec, p);
+  const q = progress(p).per[sec.id];
+  let html = "", whoShown = false, choiceShown = false;
+  items.forEach(it => {
+    if (it.k === "w" && !whoShown) { whoShown = true; html += `<div class="subhead"><h3>Who should mainly handle each of these?</h3><p class="small muted">Think about the life you’re building, not just how it is today.</p></div>`; }
+    if (it.k === "c" && !choiceShown && sec.group === "topic") { choiceShown = true; html += `<div class="subhead"><h3>Decisions</h3><p class="small muted">Pick the answer closest to what you want.${p.setup.guess ? " Then guess what " + esc(p.partner) + " will pick." : ""}</p></div>`; }
+    html += itemHTML(it, p);
+  });
+  const prompt = sec.prompt ? `<div class="q openq"><label for="open-${sec.id}"><span class="eyebrow">Optional</span><br><span class="qt">${esc(sec.prompt)}</span></label><textarea id="open-${sec.id}" data-open="${sec.id}" maxlength="1500" placeholder="A few sentences. ${esc(p.partner)} will see this next to their own answer.">${esc(p.open[sec.id] || "")}</textarea></div>` : "";
+  const prev = secs[i - 1], next = secs[i + 1];
+  return `<main class="wrap">
+    <div class="sechead">
+      <p class="eyebrow">${sec.group === "topic" ? "Topic" : "About you"} · ${i + 1} of ${secs.length}</p>
+      <h2>${esc(fill(sec.title, p))}</h2>
+      <p class="muted">${esc(fill(sec.intro, p))}</p>
+    </div>
+    <div class="stickyprog"><div class="prog"><i id="secprog" style="width:${q.t ? q.d / q.t * 100 : 0}%"></i></div><span class="n" id="secn">${q.d} / ${q.t}</span></div>
+    ${html}${prompt}
+    <nav class="secnav">
+      ${prev ? `<button class="btn ghost" data-act="open" data-sec="${prev.id}">← ${esc(fill(prev.title, p))}</button>` : `<span></span>`}
+      <button class="btn ghost" data-act="go" data-to="home">All sections</button>
+      ${next ? `<button class="btn primary" data-act="open" data-sec="${next.id}" data-check="${sec.id}">${esc(fill(next.title, p))} →</button>` : `<button class="btn primary" data-act="finish">Finish</button>`}
+    </nav>
+  </main>`;
+}
+
+function renderSafety() {
+  return `<main class="wrap stack-lg">
+    <div class="sechead"><p class="eyebrow">Private</p><h2>A private check</h2>
+    <p class="muted">These questions are for you alone. Nothing you tick here is saved, shared, or included in the results, and it disappears when you leave this page.</p></div>
+    <div class="safety" id="safety">${SAFETY.map((t, i) => `<label><input type="checkbox" data-safety="${i}"><span>${esc(t)}</span></label>`).join("")}</div>
+    <div class="notice bad stack" id="safety-help" hidden>
+      <p><b>What you’ve ticked deserves attention from someone whose job is your safety.</b> A compatibility questionnaire can’t help with this, and talking it through with your partner may not be safe.</p>
+      <p>In the US, the National Domestic Violence Hotline is free, confidential and open 24/7: call <b class="mono">1-800-799-7233</b> or text <b class="mono">START</b> to <b class="mono">88788</b>, or chat at <b>thehotline.org</b>. Outside the US, search for your country’s domestic abuse helpline. If this device is shared or monitored, use a safer one.</p>
+    </div>
+    <div><button class="btn" data-act="go" data-to="home">Back</button></div>
+  </main>`;
+}
+
+function renderHandoff() {
+  const o = data.people[otherKey()];
+  const p = me();
+  return `<main class="wrap stack-lg" style="text-align:center;align-items:center">
+    <div class="stack" style="max-width:520px;margin:40px auto 0">
+      <p class="eyebrow">Pass the device</p>
+      <h1 style="font-size:clamp(2rem,6vw,2.8rem)">Over to ${esc(p.partner)}</h1>
+      <p class="lede">${esc(p.name)}, your answers are saved and hidden. Hand the device to ${esc(p.partner)}.</p>
+      <div class="row-wrap" style="justify-content:center"><button class="btn primary" data-act="switch">I’m ${esc(p.partner)}, ${o ? "continue" : "start"}</button><button class="btn ghost" data-act="go" data-to="home">Not yet</button></div>
+    </div></main>`;
+}
+
+function renderShare() {
+  const p = me();
+  return `<main class="wrap stack-lg">
+    <div class="sechead"><p class="eyebrow">Share</p><h2>Your answer code</h2>
+    <p class="muted">Send this code to ${esc(p.partner)} by text or email. They paste it into “Add ${esc(p.name)}’s answers” on their device. Ask them to send you theirs too, so you can both see the results.</p></div>
+    ${ui.code ? `<textarea class="code" id="code" readonly>${esc(ui.code)}</textarea>
+      <div class="row-wrap"><button class="btn primary" data-act="copy">Copy code</button><span id="copied" class="small muted" role="status"></span></div>` : `<p>Preparing your code…</p>`}
+    <div class="notice small">Anyone with this code can read your answers, so send it only to ${esc(p.partner)}. Your private check isn’t included. You can also keep the code as a backup.</div>
+    <div class="row-wrap"><button class="btn" data-act="go" data-to="import">Add ${esc(p.partner)}’s answers</button><button class="btn ghost" data-act="go" data-to="home">Back</button></div>
+  </main>`;
+}
+
+function renderImport() {
+  const p = me();
+  return `<main class="wrap stack-lg">
+    <div class="sechead"><p class="eyebrow">Combine</p><h2>Add ${esc(p.partner)}’s answers</h2>
+    <p class="muted">Paste the answer code ${esc(p.partner)} sent you. It’s unpacked here on your device; nothing is uploaded.</p></div>
+    <label class="field"><span>Answer code</span><textarea class="code" id="importcode" placeholder="BRG1.…"></textarea></label>
+    ${ui.importMsg ? `<div class="notice ${ui.importMsg.ok ? "good" : "bad"}" role="status">${esc(ui.importMsg.text)}</div>` : ""}
+    <div class="row-wrap"><button class="btn primary" data-act="import">Add answers</button><button class="btn ghost" data-act="go" data-to="home">Back</button></div>
+    ${!p.done ? `<p class="small muted">You can add the code now, but the results unlock once you’ve finished your own answers, so theirs can’t influence yours.</p>` : ""}
+  </main>`;
+}
+
+/* ---------- Results ---------- */
+function pairForResults() {
+  if (ui.sample) return [ui.sample.A, ui.sample.B];
+  return resultsPair();
+}
+function talkState() { return ui.sample ? ui.sampleTalk : data.talk; }
+
+function renderResults() {
+  const pair = pairForResults();
+  if (!pair) return `<main class="wrap"><p>Results appear once you’ve both finished.</p></main>`;
+  const [A, B] = pair;
+  const R = analyze(A, B);
+  const tabs = [["overview", "Overview"], ["topics", "Topics"], ["decisions", "Decisions"], ["us", "The two of you"], ["talk", "Talk list"], ["exercises", "Exercises"]];
+  let body = "";
+  if (ui.tab === "overview") body = resOverview(R);
+  else if (ui.tab === "topics") body = resTopics(R);
+  else if (ui.tab === "decisions") body = resDecisions(R);
+  else if (ui.tab === "us") body = resUs(R);
+  else if (ui.tab === "talk") body = resTalk(R);
+  else body = resExercises(R);
+  return `<main class="wrap wide">
+    ${ui.sample ? `<div class="samplebar"><span><b>Sample report.</b> Avery and Theo are a fictional couple; every answer is invented.</span><button class="btn" data-act="exitSample">${me() ? "Back to my answers" : "Set up our own"}</button></div>` : ""}
+    <div class="stack" style="margin-bottom:14px"><p class="eyebrow">Results</p><h1 style="font-size:clamp(2rem,6vw,2.8rem)"><span style="color:var(--pa)">${esc(A.name)}</span> &amp; <span style="color:var(--pb)">${esc(B.name)}</span></h1></div>
+    <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button class="tab" role="tab" aria-selected="${ui.tab === k}" data-act="tab" data-tab="${k}">${l}</button>`).join("")}</div>
+    ${body}
+  </main>`;
+}
+
+const nameA = R => `<span class="who"><span class="dot a"></span>${esc(R.A.name)}</span>`;
+const nameB = R => `<span class="who"><span class="dot b"></span>${esc(R.B.name)}</span>`;
+
+function resOverview(R) {
+  const groups = { strong: [], good: [], mid: [], low: [] };
+  R.topics.filter(x => x.pca != null).forEach(x => groups[band(x.pca).k].push(x));
+  const bandBox = (k, label, sub) => `<div class="band ${k}"><h4>${label}</h4><p class="small muted">${sub}</p><ul>${groups[k].length ? groups[k].map(x => `<li>${esc(x.t.title)}</li>`).join("") : `<li class="muted">None</li>`}</ul></div>`;
+  const idealNote = (P, s) => s == null ? "" : `<li>${esc(P.name)}: <b>${s >= 65 ? "rose-colored" : s >= 40 ? "a little rosy" : "realistic"}</b> (${s}%)${s >= 65 ? ". Expect this person’s answers to look sunnier than things really are." : "."}</li>`;
+  const top = R.talk.slice(0, 6);
+  return `<div class="stack-lg">
+    <div class="grid2">
+      <section class="stack">
+        <p class="eyebrow">Agreement across topics</p>
+        <p style="font-family:var(--f-display);font-size:3.4rem;line-height:1;font-weight:800">${R.overall == null ? "–" : R.overall + "%"}</p>
+        <p class="muted">Share of statements where you both answered on the same side and in the healthy direction. There’s no passing score. Nobody agrees on everything, and the useful part is the list of specific differences.</p>
+        <p class="small muted">Guessing: ${esc(R.A.name)} got ${R.guesses.a[0]} of ${R.guesses.a[1]} right, ${esc(R.B.name)} got ${R.guesses.b[0]} of ${R.guesses.b[1]}.</p>
+      </section>
+      <section class="stack">
+        <p class="eyebrow">Rose-colored glasses check</p>
+        <ul class="stack small" style="margin:0;padding-left:1.1em">${idealNote(R.A, R.ideal.a)}${idealNote(R.B, R.ideal.b)}</ul>
+        <p class="small muted">Based on seven deliberately extreme statements like “My partner has never disappointed me.” Agreeing with many of them usually means seeing the relationship through a filter.</p>
+      </section>
+    </div>
+    <div class="bands">
+      ${bandBox("strong", "Strengths", "80% agreement or more")}
+      ${bandBox("good", "Likely strengths", "50 to 79%")}
+      ${bandBox("mid", "Worth discussing", "30 to 49%")}
+      ${bandBox("low", "Talk about first", "Under 30%")}
+    </div>
+    <section class="stack">
+      <h3>By topic</h3>
+      <div class="legend"><span>Bar: how much you agree</span><span>Numbers: how positive each of you feels about the topic, 0–100</span></div>
+      <div class="tbars">${R.topics.filter(x => x.pca != null).map(x => { const b = band(x.pca); return `<button class="tbar" data-act="topic" data-topic="${x.t.id}"><span class="nm">${esc(x.t.title)}</span><span class="track"><i class="fill-${b.k}" style="width:${Math.max(3, x.pca)}%"></i></span><span class="pct">${x.pca}%</span><span class="ind"><span class="who"><span class="dot a"></span>${x.indA ?? "–"}</span><span class="who"><span class="dot b"></span>${x.indB ?? "–"}</span><span>${b.label}</span></span></button>`; }).join("")}</div>
+    </section>
+    <section class="stack">
+      <div class="row-wrap" style="justify-content:space-between"><h3>Start here</h3><button class="linkbtn" data-act="tab" data-tab="talk">Full talk list (${R.talk.length})</button></div>
+      <div>${top.map(r => talkRow(R, r)).join("")}</div>
+    </section>
+  </div>`;
+}
+
+function pips(R, a, b) {
+  return `<div class="pips">${[1, 2, 3, 4, 5].map(v => `<div class="pip">${a === v ? `<span class="a" title="${esc(R.A.name)}">${esc(R.A.name[0])}</span>` : ""}${b === v ? `<span class="b" title="${esc(R.B.name)}">${esc(R.B.name[0])}</span>` : ""}</div>`).join("")}</div>`;
+}
+const pipKey = () => `<div class="pipkey">${SCALES.agree.map(l => `<span>${l}</span>`).join("")}</div>`;
+function whoLabel(i, P, Q) { return [P.name, "Mostly " + P.name, "Both equally", "Mostly " + Q.name, Q.name][i]; }
+function choiceAnswers(R, r) {
+  const it = r.it;
+  if (it.k === "w") return `<div class="ans"><div>${nameA(R)}<span>${esc(whoLabel(r.a, R.A, R.B))}</span></div><div>${nameB(R)}<span>${esc(whoLabel(r.b, R.B, R.A))}</span></div></div>`;
+  const gl = (who, g, actual) => g == null ? "" : g === actual ? `<span class="ok">✓</span> ${esc(who)} guessed right` : `<span class="no">✗</span> ${esc(who)} guessed “${esc(it.o[g])}”`;
+  const gA = gl(R.A.name, r.ga, r.b), gB = gl(R.B.name, r.gb, r.a);
+  return `<div class="ans"><div>${nameA(R)}<span>${esc(it.o[r.a])}</span></div><div>${nameB(R)}<span>${esc(it.o[r.b])}</span></div></div>${gA || gB ? `<p class="gs">${[gA, gB].filter(Boolean).join(" · ")}</p>` : ""}`;
+}
+function starBtns(id) {
+  const ts = talkState();
+  return `<button class="iconbtn" data-act="star" data-id="${id}" aria-pressed="${!!ts.star[id]}" title="Add to talk list">★</button><button class="iconbtn donebtn" data-act="done" data-id="${id}" aria-pressed="${!!ts.done[id]}" title="Mark as talked about">✓</button>`;
+}
+function itemRow(R, r, opts) {
+  const it = r.it;
+  const tag = it.k === "s" && !it.p ? `<span class="chip tag">values</span>` : "";
+  const detail = it.k === "s" ? pips(R, r.a, r.b) : choiceAnswers(R, r);
+  return `<div class="item"><div class="stack" style="gap:8px">${opts && opts.topic ? `<span class="eyebrow">${esc(r.topic.title)}</span>` : ""}<p>${esc(it.k === "w" ? "Who should handle: " + it.t : it.t.replace(/\{p\}/g, "partner"))} ${tag}</p>${detail}</div><div class="side"><span class="chip ${r.cat}">${CAT_LABEL[r.cat]}</span>${r.miss ? `<span class="chip tag">surprise</span>` : ""}${starBtns(it.id)}</div></div>`;
+}
+const talkRow = (R, r) => itemRow(R, r, { topic: true });
+
+function resTopics(R) {
+  const x = R.topics.find(t => t.t.id === ui.topic);
+  if (!x) {
+    return `<div class="stack"><p class="muted">Pick a topic to see every answer side by side, what to talk about, and an exercise to try.</p><div class="tbars">${R.topics.map(x => { const b = x.pca == null ? null : band(x.pca); return `<button class="tbar" data-act="topic" data-topic="${x.t.id}"><span class="nm">${esc(x.t.title)}</span><span class="track">${b ? `<i class="fill-${b.k}" style="width:${Math.max(3, x.pca)}%"></i>` : ""}</span><span class="pct">${x.pca == null ? "" : x.pca + "%"}</span><span class="ind">${b ? b.label : ""}</span></button>`; }).join("")}</div></div>`;
+  }
+  return topicDetail(R, x);
+}
+
+function topicDetail(R, x) {
+  const t = x.t, b = band(x.pca ?? 0);
+  const st = x.rows.filter(r => r.it.k === "s");
+  const ch = x.rows.filter(r => r.it.k !== "s");
+  const by = k => st.filter(r => r.cat === k);
+  const strengths = by("agree").filter(r => r.it.p).slice(0, 2);
+  const discuss = by("concern").concat(by("differ"), by("unsure")).slice(0, 3);
+  const group = (k, title, note) => { const rs = by(k); return rs.length ? `<section class="stack"><h4>${title} <span class="muted small">(${rs.length})</span></h4>${note ? `<p class="small muted">${note}</p>` : ""}<div>${pipKey()}${rs.map(r => itemRow(R, r)).join("")}</div></section>` : ""; };
+  const ex = EX[t.ex];
+  const oa = R.A.open[t.id], ob = R.B.open[t.id];
+  const i = TOPICS.findIndex(q => q.id === t.id);
+  const nav = R.topics;
+  const j = nav.findIndex(q => q.t.id === t.id);
+  return `<div class="stack-lg">
+    <div class="row-wrap" style="justify-content:space-between"><button class="linkbtn" data-act="topic" data-topic="">← All topics</button>
+      <div class="row-wrap">${nav[j - 1] ? `<button class="btn ghost" data-act="topic" data-topic="${nav[j - 1].t.id}">← ${esc(nav[j - 1].t.title)}</button>` : ""}${nav[j + 1] ? `<button class="btn ghost" data-act="topic" data-topic="${nav[j + 1].t.id}">${esc(nav[j + 1].t.title)} →</button>` : ""}</div></div>
+    <div class="detailhead"><p class="eyebrow">Topic ${i + 1}</p><h2>${esc(t.title)}</h2><p class="muted">${esc(t.intro)}</p>
+      <div class="row-wrap"><span class="chip ${b.k === "strong" || b.k === "good" ? "agree" : b.k === "mid" ? "unsure" : "concern"}">${b.label} · ${x.pca}% agreement</span><span class="small muted">How positive each of you feels:</span>${nameA(R)}<span class="mono">${x.indA ?? "–"}</span>${nameB(R)}<span class="mono">${x.indB ?? "–"}</span></div>
+    </div>
+    <section class="card stack">
+      <h3>Tonight’s conversation</h3>
+      <p class="small muted">Start with what’s working, then take two or three items to discuss. Use the listening exercise if it gets heated.</p>
+      ${strengths.length ? `<p class="eyebrow">Start with</p><ul class="asklist">${strengths.map(r => `<li>${esc(r.it.t)}</li>`).join("")}</ul>` : ""}
+      ${discuss.length ? `<p class="eyebrow">Then talk about</p><ul class="asklist">${discuss.map(r => `<li>${esc(r.it.t)} <span class="chip ${r.cat}">${CAT_LABEL[r.cat]}</span></li>`).join("")}</ul>` : `<p>No disagreements on the statements here. Use the questions below to go deeper.</p>`}
+      <p class="eyebrow">Questions to ask each other</p><ul class="asklist">${t.ask.map(q => `<li>${esc(q)}</li>`).join("")}</ul>
+    </section>
+    ${oa || ob ? `<section class="stack"><h3>In your own words</h3><p class="muted">${esc(t.prompt)}</p><div class="openans">${oa ? `<blockquote><b>${esc(R.A.name)}:</b> ${esc(oa)}</blockquote>` : ""}${ob ? `<blockquote class="b"><b>${esc(R.B.name)}:</b> ${esc(ob)}</blockquote>` : ""}</div></section>` : ""}
+    ${ch.length ? `<section class="stack"><h3>Decisions</h3><div>${ch.map(r => itemRow(R, r)).join("")}</div></section>` : ""}
+    <div class="stack-lg">
+      ${group("concern", "Shared concerns", "You both answered on the worried side. These are often the most useful to talk about.")}
+      ${group("differ", "You see these differently", "Two or more points apart.")}
+      ${group("unsure", "One of you isn’t sure", "Unsure answers often mean the topic hasn’t been discussed yet.")}
+      ${group("agree", "You agree", "")}
+    </div>
+    ${ex ? exCard(ex) : ""}
+  </div>`;
+}
+
+function exCard(ex) { return `<section class="card ex"><p class="eyebrow">Try this · about ${ex.min} minutes</p><h3>${esc(ex.t)}</h3><p class="muted small">${esc(ex.why)}</p><ol>${ex.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol></section>`; }
+
+function resDecisions(R) {
+  const all = [];
+  R.topics.forEach(x => x.rows.forEach(r => { if (r.it.k !== "s") all.push(Object.assign({ topic: x.t }, r)); }));
+  const counts = { same: 0, close: 0, far: 0, differ: 0, unsure: 0 };
+  all.forEach(r => counts[r.cat]++);
+  const who = all.filter(r => r.it.k === "w");
+  const choices = all.filter(r => r.it.k === "c");
+  return `<div class="stack-lg">
+    <p class="muted">Concrete choices, compared directly. “Close” means one step apart on an ordered scale. Where you guessed each other’s answers, a cross marks a surprise.</p>
+    <div class="row-wrap"><span class="chip same">Same ${counts.same}</span><span class="chip close">Close ${counts.close}</span><span class="chip far">Far apart ${counts.far + counts.differ}</span><span class="chip unsure">Unsure ${counts.unsure}</span></div>
+    <section class="stack"><h3>Who does what</h3><p class="small muted">Each of you answered from your own side. Matching answers mean you picture the same person doing the job.</p>
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Job</th><th>${esc(R.A.name)} says</th><th>${esc(R.B.name)} says</th><th></th></tr></thead><tbody>${who.map(r => `<tr><td>${esc(r.it.t)}</td><td>${esc(whoLabel(r.a, R.A, R.B))}</td><td>${esc(whoLabel(r.b, R.B, R.A))}</td><td><span class="chip ${r.cat}">${CAT_LABEL[r.cat]}</span></td></tr>`).join("")}</tbody></table></div></section>
+    <section class="stack"><h3>Everything else</h3><div>${choices.map(r => itemRow(R, r, { topic: true })).join("")}</div></section>
+  </div>`;
+}
+
+function mapSVG(R, dims, title) {
+  const W = 400, H = 400, pad = 60, cell = (W - pad - 20) / 5;
+  const pts = [[R.A, "a"], [R.B, "b"]].map(([P, k]) => { const x = mapSum(P, dims[0]), y = mapSum(P, dims[1]); return x == null || y == null ? null : { k, x, y, px: pad + mapPos(x) * cell, py: 20 + (5 - mapPos(y)) * cell }; });
+  if (pts[0] && pts[1] && Math.abs(pts[0].px - pts[1].px) < 14 && Math.abs(pts[0].py - pts[1].py) < 14) { pts[0].px -= 8; pts[1].px += 8; }
+  let g = "";
+  for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) {
+    const bal = i >= 1 && i <= 3 && j >= 1 && j <= 3;
+    g += `<rect x="${pad + i * cell}" y="${20 + j * cell}" width="${cell}" height="${cell}" style="fill:${bal ? "var(--agree-bg)" : "var(--wash)"};stroke:var(--paper);stroke-width:2"/>`;
+  }
+  const xl = CLOSE_L.map((l, i) => `<text x="${pad + i * cell + cell / 2}" y="${20 + 5 * cell + 16}" text-anchor="middle" style="fill:var(--muted);font-size:10px">${l}</text>`).join("");
+  const yl = FLEX_L.map((l, i) => `<text x="${pad - 6}" y="${20 + (4 - i) * cell + cell / 2 + 3}" text-anchor="end" style="fill:var(--muted);font-size:10px">${l}</text>`).join("");
+  const dots = pts.filter(Boolean).map(p => `<circle cx="${p.px}" cy="${p.py}" r="11" style="fill:var(--p${p.k});stroke:var(--card);stroke-width:2"/><text x="${p.px}" y="${p.py + 4}" text-anchor="middle" style="fill:#fff;font-size:11px;font-weight:700">${esc((p.k === "a" ? R.A : R.B).name[0])}</text>`).join("");
+  return `<div class="mapwrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">${g}<text x="${pad + 2.5 * cell}" y="${H - 6}" text-anchor="middle" style="fill:var(--ink);font-size:11px;font-weight:700">Closeness →</text><text x="12" y="${20 + 2.5 * cell}" text-anchor="middle" transform="rotate(-90 12 ${20 + 2.5 * cell})" style="fill:var(--ink);font-size:11px;font-weight:700">Flexibility →</text>${xl}${yl}${dots}</svg></div>`;
+}
+function mapText(R, dims, family) {
+  return [[R.A, "a"], [R.B, "b"]].map(([P, k]) => {
+    const x = mapSum(P, dims[0]), y = mapSum(P, dims[1]);
+    if (x == null || y == null) return "";
+    const cl = mapLevel(x) - 1, fl = mapLevel(y) - 1;
+    const subj = family ? `${esc(P.name)} grew up in a family that was` : `${esc(P.name)} sees the relationship as`;
+    return `<p><span class="who"><span class="dot ${k}"></span></span> ${subj} <b>${CLOSE_L[cl].toLowerCase()}</b> (${CLOSE_D[cl]}) and <b>${FLEX_L[fl].toLowerCase()}</b> (${FLEX_D[fl]})</p>`;
+  }).join("");
+}
+
+function resUs(R) {
+  const A = R.A, B = R.B;
+  const traitRow = t => {
+    const sa = traitScore(A, "me", t.k, t.flip), oa = traitScore(B, "you", t.k, t.flip);
+    const sb = traitScore(B, "me", t.k, t.flip), ob = traitScore(A, "you", t.k, t.flip);
+    const mk = (cls, v, title) => v == null ? "" : `<span class="mk ${cls}" style="left:${v}%" title="${esc(title)}: ${v}"></span>`;
+    const notes = [];
+    if (sa != null && sb != null && Math.abs(sa - sb) >= 30) notes.push(`You differ here: ${esc(sa > sb ? A.name : B.name)} is more ${t.name.toLowerCase()}.`);
+    if (sa != null && oa != null && Math.abs(sa - oa) >= 25) notes.push(`${esc(B.name)} sees ${esc(A.name)} as ${oa > sa ? "more" : "less"} ${t.name.toLowerCase()} than ${esc(A.name)} does.`);
+    if (sb != null && ob != null && Math.abs(sb - ob) >= 25) notes.push(`${esc(A.name)} sees ${esc(B.name)} as ${ob > sb ? "more" : "less"} ${t.name.toLowerCase()} than ${esc(B.name)} does.`);
+    return `<div class="trait"><div class="row-wrap" style="justify-content:space-between"><b>${t.name}</b></div>
+      <div class="ttrack">${mk("fa", sa, A.name + " (self)")}${mk("ha", oa, A.name + " as seen by " + B.name)}</div>
+      <div class="ttrack">${mk("fb", sb, B.name + " (self)")}${mk("hb", ob, B.name + " as seen by " + A.name)}</div>
+      <div class="tends"><span>${t.lo}</span><span>${t.hi}</span></div>
+      ${notes.length ? `<p class="small">${notes.join(" ")}</p>` : ""}</div>`;
+  };
+  const dynTable = DYN.map(d => {
+    const la = level3(scoreDim(A, STAND, d.k)), lb = level3(scoreDim(B, STAND, d.k));
+    return `<tr><td><b>${d.name}</b></td><td><span class="lv">${la}</span><br><span class="small muted">${esc(A.name)} ${d.d[la] || ""}</span></td><td><span class="lv">${lb}</span><br><span class="small muted">${esc(B.name)} ${d.d[lb] || ""}</span></td></tr>`;
+  }).join("");
+  const controlled = [A, B].filter(P => level3(scoreDim(P, STAND, "fc")) === "High");
+  const commitItems = STAND.filter(it => it.dim === "cm" || it.dim === "cmp");
+  const stressTop = P => STRESS.filter(it => (P.ans[it.id] || 0) >= 4).sort((x, y) => P.ans[y.id] - P.ans[x.id]);
+  const stressLvl = P => { const vals = STRESS.filter(it => P.ans[it.id] != null).map(it => P.ans[it.id]); const s = pct(vals); return s == null ? "–" : s < 30 ? "Low" : s < 50 ? "Moderate" : "High"; };
+  const tA = stressTop(A), tB = stressTop(B);
+  const shared = tA.filter(it => tB.includes(it));
+  const facts = FAMILY.filter(it => it.k === "c");
+  return `<div class="stack-lg">
+    <div class="grid2">
+      <section class="stack"><h3>Your relationship map</h3><p class="small muted">How close and how flexible each of you says the relationship is. The green middle is the balanced zone; most healthy couples sit somewhere inside it.</p>${mapSVG(R, ["cc", "cf"], "Relationship map")}<div class="stack small">${mapText(R, ["cc", "cf"], false)}</div></section>
+      <section class="stack"><h3>The families you grew up in</h3><p class="small muted">The same map for each family of origin. Big gaps between your families can show up as different instincts about holidays, privacy and rules.</p>${mapSVG(R, ["fc", "ff"], "Family maps")}<div class="stack small">${mapText(R, ["fc", "ff"], true)}</div></section>
+    </div>
+    <section class="stack"><h3>Personality</h3>
+      <div class="legend"><span><span class="mk fa"></span>${esc(A.name)}, self</span><span><span class="mk ha"></span>${esc(A.name)}, as ${esc(B.name)} sees them</span><span><span class="mk fb"></span>${esc(B.name)}, self</span><span><span class="mk hb"></span>${esc(B.name)}, as ${esc(A.name)} sees them</span></div>
+      <div>${TRAITS.map(traitRow).join("")}</div>
+      <p class="small muted">From the 20-item Mini-IPIP, a short public-domain measure of the Big Five. No end of any scale is better; differences are something to understand, not fix.</p>
+    </section>
+    <div class="grid2">
+      <section class="stack"><h3>How each of you shows up</h3><div class="tblwrap"><table class="tbl"><thead><tr><th></th><th>${esc(A.name)}</th><th>${esc(B.name)}</th></tr></thead><tbody>${dynTable}</tbody></table></div>
+        ${controlled.length ? `<div class="notice warn small">${controlled.map(P => esc(P.name)).join(" and ")} often feel${controlled.length === 1 ? "s" : ""} controlled. That’s worth a careful conversation. If it ever feels unsafe to have it, the private check on the Questions page lists confidential help.</div>` : ""}
+      </section>
+      <section class="stack"><h3>Commitment</h3><div class="tblwrap"><table class="tbl"><thead><tr><th></th><th>${esc(A.name)}</th><th>${esc(B.name)}</th></tr></thead><tbody>${commitItems.map(it => `<tr><td>${esc(it.t)}</td><td>${SCALES.agree[(A.ans[it.id] || 3) - 1]}</td><td>${SCALES.agree[(B.ans[it.id] || 3) - 1]}</td></tr>`).join("")}</tbody></table></div></section>
+    </div>
+    <div class="grid2">
+      <section class="stack"><h3>Stress lately</h3>
+        <div class="kv"><span>${nameA(R)}</span><span>${stressLvl(A)} overall</span><span>${nameB(R)}</span><span>${stressLvl(B)} overall</span></div>
+        <p class="small"><b>${esc(A.name)}’s top stressors:</b> ${tA.length ? tA.map(it => esc(it.t)).join(", ") : "none rated often"}</p>
+        <p class="small"><b>${esc(B.name)}’s top stressors:</b> ${tB.length ? tB.map(it => esc(it.t)).join(", ") : "none rated often"}</p>
+        ${shared.length ? `<p class="small"><b>Shared:</b> ${shared.map(it => esc(it.t)).join(", ")}. Stress you share is easier to tackle as a team.</p>` : ""}
+      </section>
+      <section class="stack"><h3>Growing up</h3><div class="tblwrap"><table class="tbl"><thead><tr><th></th><th>${esc(A.name)}</th><th>${esc(B.name)}</th></tr></thead><tbody>${facts.map(it => `<tr><td>${esc(it.t)}</td><td>${A.ans[it.id] != null ? esc(it.o[A.ans[it.id]]) : "–"}</td><td>${B.ans[it.id] != null ? esc(it.o[B.ans[it.id]]) : "–"}</td></tr>`).join("")}</tbody></table></div>
+        ${A.open.growing || B.open.growing ? `<div class="openans">${A.open.growing ? `<blockquote><b>${esc(A.name)}:</b> ${esc(A.open.growing)}</blockquote>` : ""}${B.open.growing ? `<blockquote class="b"><b>${esc(B.name)}:</b> ${esc(B.open.growing)}</blockquote>` : ""}</div>` : ""}
+      </section>
+    </div>
+  </div>`;
+}
+
+function resTalk(R) {
+  const ts = talkState();
+  const f = ui.talkFilter;
+  let rows = R.talk;
+  if (f === "star") rows = rows.filter(r => ts.star[r.it.id]);
+  if (f === "open") rows = rows.filter(r => !ts.done[r.it.id]);
+  const doneCount = R.talk.filter(r => ts.done[r.it.id]).length;
+  return `<div class="stack">
+    <p class="muted">Everything worth a conversation, most important first: big decisions where you’re far apart, shared concerns, then clear differences. Star the ones you want to cover and tick them off as you go. ${R.talk.length ? `You’ve talked about ${doneCount} of ${R.talk.length}.` : ""}</p>
+    <div class="filters" role="group" aria-label="Filter">${[["all", "All"], ["open", "Not talked about yet"], ["star", "Starred"]].map(([k, l]) => `<button data-act="talkFilter" data-f="${k}" aria-pressed="${f === k}">${l}</button>`).join("")}</div>
+    <div>${rows.length ? rows.map(r => talkRow(R, r)).join("") : `<p class="muted">Nothing here.</p>`}</div>
+  </div>`;
+}
+
+function resExercises(R) {
+  const low = R.topics.filter(x => x.pca != null).sort((a, b) => a.pca - b.pca).slice(0, 3).map(x => x.t.ex);
+  const sug = Array.from(new Set(["checkin", "listen", "fight", "timeout"].concat(low)));
+  const rest = Object.keys(EX).filter(k => !sug.includes(k));
+  return `<div class="stack-lg">
+    <p class="muted">Short structured conversations. The first few are suggested for you: the core skills, plus your three lowest-agreement topics.</p>
+    <section class="stack"><h3>Suggested for you</h3><div class="grid2">${sug.map(k => exCard(EX[k])).join("")}</div></section>
+    <section class="stack"><h3>More</h3><div class="grid2">${rest.map(k => exCard(EX[k])).join("")}</div></section>
+  </div>`;
+}
+
+/* ---------- About ---------- */
+function renderAbout() {
+  return `<main class="wrap stack-lg">
+    <div class="sechead"><p class="eyebrow">How it works</p><h2>What Bearings does, and doesn’t</h2></div>
+    <section class="stack"><h3>The idea</h3><p>Premarital inventories used by counselors and clergy work the same basic way: each partner answers a long questionnaire alone, and the results show, item by item, where you agree and where you don’t. The value is in the conversations that follow, not in any score. Bearings follows that structure, with original questions, and adds concrete decisions, guessing, and two-way personality ratings.</p></section>
+    <section class="stack"><h3>How answers are compared</h3>
+      <div class="tblwrap"><table class="tbl"><tbody>
+        <tr><td><span class="chip agree">Agree</span></td><td>You’re both on the same side of “not sure”, and it’s the healthy side. For values questions, which have no healthy side, any shared answer counts.</td></tr>
+        <tr><td><span class="chip differ">Differ</span></td><td>Your answers are two or more points apart.</td></tr>
+        <tr><td><span class="chip unsure">Unsure</span></td><td>At least one of you answered “not sure”, and you’re otherwise close.</td></tr>
+        <tr><td><span class="chip concern">Shared concern</span></td><td>You agree, but on the worried side.</td></tr>
+      </tbody></table></div>
+      <p>A topic’s agreement score is the share of its statements you agree on. 80% or more is a strength, 50 to 79% a likely strength, 30 to 49% worth discussing, and under 30% a place to start. Decision questions are compared directly: same, close (one step apart), or far apart.</p>
+    </section>
+    <section class="stack"><h3>What it isn’t</h3><p>Bearings hasn’t been validated as a psychological test. It doesn’t predict whether a marriage will last, and it can’t detect abuse or coercion. If something in your results worries you, a couples counselor is the right next step, and many offer a validated inventory as part of premarital counseling.</p></section>
+    <section class="stack"><h3>Privacy</h3><p>Everything runs in your browser. Answers are stored on this device only. The answer code is your answers, compressed; nobody else can read it unless you send it to them. The private check is never stored.</p></section>
+    <section class="stack"><h3>Credits</h3><p>All statements, decision questions and exercises were written for Bearings. The personality items are the Mini-IPIP (Donnellan, Oswald, Baird &amp; Lucas, 2006), from the public-domain International Personality Item Pool. The closeness and flexibility maps are inspired by the circumplex model of couple and family systems.</p></section>
+    <div><button class="btn" data-act="go" data-to="${me() ? "home" : "home"}">Back</button></div>
+  </main>`;
+}
+
+/* =====================================================================
+   EVENTS
+   ===================================================================== */
+const ACT = {
+  go(t) { ui.screen = t.dataset.to; ui.confirmReset = false; ui.finishWarn = false; if (ui.screen === "import") ui.importMsg = null; if (ui.screen !== "results" && ui.screen !== "about" && ui.sample && !me()) { ui.sample = null; } if (ui.screen === "home" && ui.sample) ui.sample = null; render(); window.scrollTo(0, 0); },
+  open(t) {
+    if (t.dataset.check) {
+      const p = me(); const sec = SECTION_BY_ID[t.dataset.check];
+      const missing = visItems(sec, p).filter(it => isRequired(it) && p.ans[it.id] == null);
+      if (missing.length && !t.dataset.ok) {
+        document.querySelectorAll(".q.missing").forEach(e => e.classList.remove("missing"));
+        missing.forEach(it => { const el = document.getElementById("q-" + it.id); if (el) el.classList.add("missing"); });
+        const first = document.getElementById("q-" + missing[0].id);
+        if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+        t.dataset.ok = "1";
+        t.textContent = `Skip ${missing.length} and continue →`;
+        return;
+      }
+    }
+    ui.screen = "section"; ui.sec = t.dataset.sec; ui.flash = null; render(); window.scrollTo(0, 0);
+  },
+  ans(t) {
+    const p = me(); const id = t.dataset.id; const v = +t.dataset.v;
+    p.ans[id] = v; p.updated = Date.now(); save();
+    const grp = t.closest("[data-grp]");
+    grp.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === t)));
+    const q = t.closest(".q"); q.classList.remove("missing");
+    const g = q.querySelector(".guess"); if (g) g.hidden = false;
+    const secId = ITEM_BY_ID[id].sec; const pr = progress(p).per[secId];
+    const bar = document.getElementById("secprog"), n = document.getElementById("secn");
+    if (bar) bar.style.width = (pr.d / pr.t * 100) + "%"; if (n) n.textContent = pr.d + " / " + pr.t;
+  },
+  guess(t) {
+    const p = me(); const id = t.dataset.id; const v = +t.dataset.v;
+    if (p.gs[id] === v) { delete p.gs[id]; t.setAttribute("aria-pressed", "false"); }
+    else { p.gs[id] = v; t.closest("[data-grp]").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === t))); }
+    save();
+  },
+  finish(t) {
+    const p = me(); const pr = progress(p);
+    if (pr.done < pr.total && !t.dataset.force) { ui.screen = "home"; ui.finishWarn = true; render(); window.scrollTo(0, 0); return; }
+    p.done = true; ui.finishWarn = false; save();
+    if (data.mode === "shared") { const o = data.people[otherKey()]; ui.screen = o && o.done ? "results" : "handoff"; render(); window.scrollTo(0, 0); }
+    else ACT.share();
+  },
+  finishCancel() { ui.finishWarn = false; render(); },
+  async share() {
+    ui.screen = "share"; ui.code = null; render(); window.scrollTo(0, 0);
+    ui.code = await encodePerson(me()); if (ui.screen === "share") render();
+  },
+  copy() {
+    const ta = document.getElementById("code"); const msg = document.getElementById("copied");
+    const done = ok => { if (msg) msg.textContent = ok ? "Copied." : "Select the code and copy it manually."; };
+    try { navigator.clipboard.writeText(ui.code).then(() => done(true), () => { ta.select(); done(false); }); } catch (e) { ta.select(); done(false); }
+  },
+  async import() {
+    const ta = document.getElementById("importcode");
+    try {
+      const o = await decodePerson(ta.value);
+      const p = me();
+      if (o.name.toLowerCase() === p.name.toLowerCase() && o.partner.toLowerCase() === p.partner.toLowerCase()) throw new Error("That’s your own answer code. Paste the one " + p.partner + " sent you.");
+      data.people[otherKey()] = o; save();
+      const pr = progress(o);
+      ui.flash = `Added ${o.name}’s answers (${pr.done} of ${pr.total} answered).` + (p.done ? " Your results are ready." : " Finish your own answers to unlock the results.");
+      ui.screen = "home"; render(); window.scrollTo(0, 0);
+    } catch (e) { ui.importMsg = { ok: false, text: e.message || "That code couldn’t be read. Check that you copied all of it." }; render(); }
+  },
+  handoff() { ui.screen = "handoff"; render(); window.scrollTo(0, 0); },
+  switch() {
+    const p = me(); const k = otherKey();
+    if (!data.people[k]) data.people[k] = newPerson(p.partner, p.name, Object.assign({}, p.setup));
+    data.active = k; save(); ui.screen = "home"; ui.flash = null; render(); window.scrollTo(0, 0);
+  },
+  tab(t) { ui.tab = t.dataset.tab; if (ui.tab !== "topics") ui.topic = null; ui.screen = "results"; render(); window.scrollTo(0, 0); },
+  topic(t) { ui.tab = "topics"; ui.topic = t.dataset.topic || null; render(); window.scrollTo(0, 0); },
+  star(t) { const ts = talkState(); const id = t.dataset.id; if (ts.star[id]) delete ts.star[id]; else ts.star[id] = 1; if (!ui.sample) save(); document.querySelectorAll(`[data-act="star"][data-id="${id}"]`).forEach(b => b.setAttribute("aria-pressed", String(!!ts.star[id]))); },
+  done(t) { const ts = talkState(); const id = t.dataset.id; if (ts.done[id]) delete ts.done[id]; else ts.done[id] = 1; if (!ui.sample) save(); document.querySelectorAll(`[data-act="done"][data-id="${id}"]`).forEach(b => b.setAttribute("aria-pressed", String(!!ts.done[id]))); },
+  talkFilter(t) { ui.talkFilter = t.dataset.f; render(); },
+  sample() { ui.sample = makeSample(); ui.sampleTalk = { star: {}, done: {} }; ui.screen = "results"; ui.tab = "overview"; ui.topic = null; render(); window.scrollTo(0, 0); },
+  exitSample() { ui.sample = null; ui.screen = "home"; ui.tab = "overview"; ui.topic = null; render(); window.scrollTo(0, 0); },
+  edit() { ui.editing = true; render(); window.scrollTo(0, 0); },
+  editCancel() { ui.editing = false; render(); },
+  reset(t) {
+    if (!t.dataset.force) { ui.confirmReset = true; render(); return; }
+    data = blankData(); save(); try { localStorage.removeItem(STORE); } catch (e) {}
+    ui.confirmReset = false; ui.screen = "home"; render(); window.scrollTo(0, 0);
+  },
+  resetCancel() { ui.confirmReset = false; render(); },
+};
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-act]");
+  if (!t) return;
+  const fn = ACT[t.dataset.act];
+  if (fn) { e.preventDefault(); fn(t, e); }
+});
+document.addEventListener("submit", e => {
+  if (e.target.id !== "setup") return;
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const name = String(f.get("name") || "").trim(), partner = String(f.get("partner") || "").trim();
+  if (!name || !partner) return;
+  const setup = { stage: f.get("stage") || "engaged", cohab: f.get("cohab") || "no", kids: f.get("kids") || "none", guess: f.get("guess") !== "0" };
+  const p = me();
+  if (p) {
+    p.name = name; p.partner = partner; p.setup = setup;
+    const o = data.people[otherKey()]; if (o && data.mode === "shared") { o.setup = Object.assign({}, setup, { guess: o.setup.guess }); if (!o.imported) { o.name = partner; o.partner = name; } }
+  } else {
+    data.mode = f.get("mode") === "shared" ? "shared" : "own";
+    data.active = "a";
+    data.people.a = newPerson(name, partner, setup);
+  }
+  ui.editing = false; save(); render(); window.scrollTo(0, 0);
+});
+let openTimer = null;
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.open) {
+    const p = me(); p.open[el.dataset.open] = el.value.slice(0, 1500);
+    clearTimeout(openTimer); openTimer = setTimeout(save, 400);
+  }
+  if (el.dataset && el.dataset.safety != null) {
+    const any = Array.from(document.querySelectorAll("[data-safety]")).some(x => x.checked);
+    const help = document.getElementById("safety-help"); if (help) help.hidden = !any;
+  }
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset && el.dataset.safety != null) {
+    const any = Array.from(document.querySelectorAll("[data-safety]")).some(x => x.checked);
+    const help = document.getElementById("safety-help"); if (help) help.hidden = !any;
+  }
+});
+
+load();
+render();
+})();
+</script>
+</body>
+</html>
